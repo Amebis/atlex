@@ -1,0 +1,23 @@
+EXPORTS
+	DllRegisterServer PRIVATE
+	DllUnregisterServer PRIVATE
+
+	RasEapGetInfo
+	RasEapInvokeInteractiveUI
+	RasEapInvokeConfigUI
+	RasEapFreeMemory
+	RasEapGetIdentity
+
+	EapPeerFreeErrorMemory
+	EapPeerGetInfo
+	EapPeerInvokeConfigUI
+	EapPeerConfigXml2Blob
+	EapPeerCredentialsXml2Blob
+	EapPeerConfigBlob2Xml
+	EapPeerInvokeInteractiveUI
+	EapPeerInvokeIdentityUI
+	EapPeerFreeMemory
+	EapPeerQueryCredentialInputFields
+	EapPeerQueryUserBlobFromCredentialInputFields
+	EapPeerQueryInteractiveUIInputFields
+	EapPeerQueryUIBlobFromInteractiveUIInputFields

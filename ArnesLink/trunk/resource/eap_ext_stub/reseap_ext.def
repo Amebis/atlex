@@ -1,0 +1,20 @@
+EXPORTS
+	SW2Initialize
+	SW2Uninitialize
+
+	SW2GetIdentity
+	SW2InvokeIdentityUI
+	SW2FreeIdentity
+
+	SW2GetResponse
+	SW2InvokeResponseUI
+	SW2FreeResponse
+
+	SW2GetCredentials
+	SW2InvokeCredentialsUI
+	SW2FreeCredentials
+	
+	SW2HandleResult
+	
+	SW2HandleError
+	SW2HandleInteractiveError
