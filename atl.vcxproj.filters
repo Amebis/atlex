@@ -28,5 +28,8 @@
     <ClInclude Include="atlcrypt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="atlwlan.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
