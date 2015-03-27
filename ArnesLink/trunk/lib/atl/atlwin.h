@@ -30,7 +30,7 @@ inline int GetWindowTextA(__in HWND hWnd, __out ATL::CAtlStringA &sValue)
     // Query the final string length first.
     iResult = ::GetWindowTextLengthA(hWnd);
     if (iResult > 0) {
-        // Prepare the buffer to format the string data into and read it.
+        // Prepare the buffer and read the string data into it.
         LPSTR szBuffer = sValue.GetBuffer(iResult++);
         if (!szBuffer) return 0;
         iResult = ::GetWindowTextA(hWnd, szBuffer, iResult);
@@ -51,7 +51,7 @@ inline int GetWindowTextW(__in HWND hWnd, __out ATL::CAtlStringW &sValue)
     // Query the final string length first.
     iResult = ::GetWindowTextLengthW(hWnd);
     if (iResult > 0) {
-        // Prepare the buffer to format the string data into and read it.
+        // Prepare the buffer and read the string data into it.
         LPWSTR szBuffer = sValue.GetBuffer(iResult++);
         if (!szBuffer) return 0;
         iResult = ::GetWindowTextW(hWnd, szBuffer, iResult);
