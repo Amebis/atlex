@@ -36,9 +36,12 @@ inline DWORD WlanReasonCodeToString(__in DWORD dwReasonCode, __out ATL::CAtlStri
         DWORD dwResult = ::WlanReasonCodeToString(dwReasonCode, dwSize, szBuffer, pReserved);
         if (dwResult == NO_ERROR) {
             DWORD dwLength = (DWORD)wcsnlen(szBuffer, dwSize);
-            sValue.ReleaseBuffer(dwLength);
-            if (dwLength < dwSize - 1) {
-                // Buffer was long enough to get entire string.
+            sValue.ReleaseBuffer(dwLength++);
+            if (dwLength == dwSize) {
+                // Buffer was long exactly enough.
+                return NO_ERROR;
+            } else if (dwLength < dwSize) {
+                // Buffer was long enough to get entire string, and has some extra space left.
                 sValue.FreeExtra();
                 return NO_ERROR;
             }

@@ -19,8 +19,77 @@
 
 #pragma once
 
+#include <atlcoll.h>
 #include <atlstr.h>
 #include <Windows.h>
+
+
+inline DWORD GetModuleFileNameA(__in_opt HMODULE hModule, __out ATL::CAtlStringA &sValue)
+{
+    DWORD dwSize = 0;
+
+    for (;;) {
+        // Increment size and allocate buffer.
+        LPSTR szBuffer = sValue.GetBuffer(dwSize += 1024);
+        if (!szBuffer) {
+            ::SetLastError(ERROR_OUTOFMEMORY);
+            return 0;
+        }
+
+        // Try!
+        DWORD dwResult = ::GetModuleFileNameA(hModule, szBuffer, dwSize);
+        if (dwResult == 0) {
+            // Error.
+            sValue.ReleaseBuffer(0);
+            return 0;
+        } else if (dwResult < dwSize) {
+            DWORD dwLength = (DWORD)strnlen(szBuffer, dwSize);
+            sValue.ReleaseBuffer(dwLength++);
+            if (dwLength == dwSize) {
+                // Buffer was long exactly enough.
+                return dwResult;
+            } if (dwLength < dwSize) {
+                // Buffer was long enough to get entire string, and has some extra space left.
+                sValue.FreeExtra();
+                return dwResult;
+            }
+        }
+    }
+}
+
+
+inline DWORD GetModuleFileNameW(__in_opt HMODULE hModule, __out ATL::CAtlStringW &sValue)
+{
+    DWORD dwSize = 0;
+
+    for (;;) {
+        // Increment size and allocate buffer.
+        LPWSTR szBuffer = sValue.GetBuffer(dwSize += 1024);
+        if (!szBuffer) {
+            ::SetLastError(ERROR_OUTOFMEMORY);
+            return 0;
+        }
+
+        // Try!
+        DWORD dwResult = ::GetModuleFileNameW(hModule, szBuffer, dwSize);
+        if (dwResult == 0) {
+            // Error.
+            sValue.ReleaseBuffer(0);
+            return 0;
+        } else if (dwResult < dwSize) {
+            DWORD dwLength = (DWORD)wcsnlen(szBuffer, dwSize);
+            sValue.ReleaseBuffer(dwLength++);
+            if (dwLength == dwSize) {
+                // Buffer was long exactly enough.
+                return dwResult;
+            } if (dwLength < dwSize) {
+                // Buffer was long enough to get entire string, and has some extra space left.
+                sValue.FreeExtra();
+                return dwResult;
+            }
+        }
+    }
+}
 
 
 inline int GetWindowTextA(__in HWND hWnd, __out ATL::CAtlStringA &sValue)
@@ -62,6 +131,40 @@ inline int GetWindowTextW(__in HWND hWnd, __out ATL::CAtlStringW &sValue)
         sValue.Empty();
         return 0;
     }
+}
+
+
+inline BOOL GetFileVersionInfoA(__in LPCSTR lptstrFilename, __reserved DWORD dwHandle, __out ATL::CAtlArray<BYTE> &aValue)
+{
+    // Get version info size.
+    DWORD dwVerInfoSize = ::GetFileVersionInfoSizeA(lptstrFilename, &dwHandle);
+    if (dwVerInfoSize != 0) {
+        if (aValue.SetCount(dwVerInfoSize)) {
+            // Read version info.
+            return ::GetFileVersionInfoA(lptstrFilename, dwHandle, dwVerInfoSize, aValue.GetData());
+        } else {
+            ::SetLastError(ERROR_OUTOFMEMORY);
+            return FALSE;
+        }
+    } else
+        return FALSE;
+}
+
+
+inline BOOL GetFileVersionInfoW(__in LPCWSTR lptstrFilename, __reserved DWORD dwHandle, __out ATL::CAtlArray<BYTE> &aValue)
+{
+    // Get version info size.
+    DWORD dwVerInfoSize = ::GetFileVersionInfoSizeW(lptstrFilename, &dwHandle);
+    if (dwVerInfoSize != 0) {
+        if (aValue.SetCount(dwVerInfoSize)) {
+            // Read version info.
+            return ::GetFileVersionInfoW(lptstrFilename, dwHandle, dwVerInfoSize, aValue.GetData());
+        } else {
+            ::SetLastError(ERROR_OUTOFMEMORY);
+            return FALSE;
+        }
+    } else
+        return FALSE;
 }
 
 
