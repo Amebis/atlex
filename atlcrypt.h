@@ -49,3 +49,115 @@ inline DWORD CertGetNameStringW(PCCERT_CONTEXT pCertContext, DWORD dwType, DWORD
     sNameString.ReleaseBuffer(dwSize);
     return dwSize;
 }
+
+
+namespace ATL
+{
+    namespace Crypt
+    {
+
+        //
+        // CCertContext
+        //
+        class CCertContext
+        {
+        public:
+            inline CCertContext() throw() : m_pCertContext(NULL)
+            {
+            }
+
+            inline CCertContext(PCCERT_CONTEXT p) throw() : m_pCertContext(p)
+            {
+            }
+
+            inline ~CCertContext() throw()
+            {
+                if (m_pCertContext)
+                    CertFreeCertificateContext(m_pCertContext);
+            }
+
+            inline operator PCCERT_CONTEXT() const throw()
+            {
+                return m_pCertContext;
+            }
+
+            inline const CERT_CONTEXT& operator*() const
+            {
+                ATLENSURE(m_pCertContext != NULL);
+                return *m_pCertContext;
+            }
+
+            inline PCCERT_CONTEXT* operator&() throw()
+            {
+                ATLASSERT(m_pCertContext == NULL);
+                return &m_pCertContext;
+            }
+
+            inline PCCERT_CONTEXT operator->() const throw()
+            {
+                ATLASSERT(m_pCertContext != NULL);
+                return m_pCertContext;
+            }
+
+            inline bool operator!() const throw()
+            {
+                return m_pCertContext == NULL;
+            }
+
+            inline bool operator<(_In_opt_ PCCERT_CONTEXT p) const throw()
+            {
+                return m_pCertContext < p;
+            }
+
+            inline bool operator!=(_In_opt_ PCCERT_CONTEXT p) const
+            {
+                return !operator==(p);
+            }
+
+            inline bool operator==(_In_opt_ PCCERT_CONTEXT p) const throw()
+            {
+                return m_pCertContext == p;
+            }
+
+            inline void Attach(_In_opt_ PCCERT_CONTEXT p) throw()
+            {
+                if (m_pCertContext)
+                    CertFreeCertificateContext(m_pCertContext);
+                m_pCertContext = p;
+            }
+
+            inline PCCERT_CONTEXT Detach() throw()
+            {
+                PCCERT_CONTEXT p = m_pCertContext;
+                m_pCertContext = NULL;
+                return p;
+            }
+
+            inline BOOL Create(_In_  DWORD dwCertEncodingType, _In_  const BYTE *pbCertEncoded, _In_  DWORD cbCertEncoded) throw()
+            {
+                PCCERT_CONTEXT p;
+
+                p = CertCreateCertificateContext(dwCertEncodingType, pbCertEncoded, cbCertEncoded);
+                if (!p) return FALSE;
+
+                if (m_pCertContext)
+                    CertFreeCertificateContext(m_pCertContext);
+                m_pCertContext = p;
+                return TRUE;
+            }
+
+            inline BOOL Free() throw()
+            {
+                if (m_pCertContext) {
+                    BOOL bResult = CertFreeCertificateContext(m_pCertContext);
+                    m_pCertContext = NULL;
+                    return bResult;
+                } else
+                    return TRUE;
+            }
+
+        protected:
+            PCCERT_CONTEXT m_pCertContext;
+        };
+    }
+}

@@ -227,79 +227,97 @@ inline DWORD ExpandEnvironmentStringsW(__in LPCWSTR lpSrc, ATL::CAtlStringW &sVa
 
 
 
-inline BOOL RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCSTR pszName, _Out_ ATL::CAtlStringA &sValue)
+inline LSTATUS RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCSTR pszName, _Out_ ATL::CAtlStringA &sValue)
 {
-    DWORD dwSize = 0;
-    DWORD dwType;
+    LSTATUS lResult;
+    DWORD dwSize = 0, dwType;
 
     // Determine the type and size first.
-    if (::RegQueryValueExA(hReg, pszName, NULL, &dwType, NULL, &dwSize) == ERROR_SUCCESS) {
+    if ((lResult = ::RegQueryValueExA(hReg, pszName, NULL, &dwType, NULL, &dwSize)) == ERROR_SUCCESS) {
         if (dwType == REG_SZ || dwType == REG_MULTI_SZ) {
             // The value is REG_SZ or REG_MULTI_SZ. Read it now.
             LPSTR szTemp = sValue.GetBuffer(dwSize / sizeof(TCHAR));
-            if (!szTemp) {
-                ::SetLastError(ERROR_OUTOFMEMORY);
-                return FALSE;
-            }
-            if (::RegQueryValueExA(hReg, pszName, NULL, NULL, (LPBYTE)szTemp, &dwSize) == ERROR_SUCCESS) {
+            if (!szTemp) return ERROR_OUTOFMEMORY;
+            if ((lResult = ::RegQueryValueExA(hReg, pszName, NULL, NULL, (LPBYTE)szTemp, &dwSize)) == ERROR_SUCCESS) {
                 sValue.ReleaseBuffer();
-                return TRUE;
             } else {
                 // Reading of the value failed.
                 sValue.ReleaseBuffer(0);
-                return FALSE;
             }
         } else if (dwType == REG_EXPAND_SZ) {
             // The value is REG_EXPAND_SZ. Read it and expand environment variables.
             ATL::CTempBuffer<CHAR> sTemp(dwSize / sizeof(CHAR));
-            return
-                ::RegQueryValueExA(hReg, pszName, NULL, NULL, (LPBYTE)(CHAR*)sTemp, &dwSize) == ERROR_SUCCESS &&
-                ::ExpandEnvironmentStringsA((const CHAR*)sTemp, sValue) != 0;
+            if ((lResult = ::RegQueryValueExA(hReg, pszName, NULL, NULL, (LPBYTE)(CHAR*)sTemp, &dwSize)) == ERROR_SUCCESS)
+                if (::ExpandEnvironmentStringsA((const CHAR*)sTemp, sValue) == 0)
+                    lResult = ::GetLastError();
         } else {
             // The value is not a string type.
-            return FALSE;
+            lResult = ERROR_INVALID_DATA;
         }
-    } else {
-        // The value with given name doesn't exist in this key.
-        return FALSE;
     }
+
+    return lResult;
 }
 
 
-inline BOOL RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCWSTR pszName, _Out_ ATL::CAtlStringW &sValue)
+inline LSTATUS RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCWSTR pszName, _Out_ ATL::CAtlStringW &sValue)
 {
-    DWORD dwSize = 0;
-    DWORD dwType;
+    LSTATUS lResult;
+    DWORD dwSize = 0, dwType;
 
     // Determine the type and size first.
-    if (::RegQueryValueExW(hReg, pszName, NULL, &dwType, NULL, &dwSize) == ERROR_SUCCESS) {
+    if ((lResult = ::RegQueryValueExW(hReg, pszName, NULL, &dwType, NULL, &dwSize)) == ERROR_SUCCESS) {
         if (dwType == REG_SZ || dwType == REG_MULTI_SZ) {
             // The value is REG_SZ or REG_MULTI_SZ. Read it now.
             LPWSTR szTemp = sValue.GetBuffer(dwSize / sizeof(TCHAR));
-            if (!szTemp) {
-                ::SetLastError(ERROR_OUTOFMEMORY);
-                return FALSE;
-            }
-            if (::RegQueryValueExW(hReg, pszName, NULL, NULL, (LPBYTE)szTemp, &dwSize) == ERROR_SUCCESS) {
+            if (!szTemp) return ERROR_OUTOFMEMORY;
+            if ((lResult = ::RegQueryValueExW(hReg, pszName, NULL, NULL, (LPBYTE)szTemp, &dwSize)) == ERROR_SUCCESS) {
                 sValue.ReleaseBuffer();
-                return TRUE;
             } else {
                 // Reading of the value failed.
                 sValue.ReleaseBuffer(0);
-                return FALSE;
             }
         } else if (dwType == REG_EXPAND_SZ) {
             // The value is REG_EXPAND_SZ. Read it and expand environment variables.
             ATL::CTempBuffer<WCHAR> sTemp(dwSize / sizeof(WCHAR));
-            return
-                ::RegQueryValueExW(hReg, pszName, NULL, NULL, (LPBYTE)(WCHAR*)sTemp, &dwSize) == ERROR_SUCCESS &&
-                ::ExpandEnvironmentStringsW((const WCHAR*)sTemp, sValue) != 0;
+            if ((lResult = ::RegQueryValueExW(hReg, pszName, NULL, NULL, (LPBYTE)(WCHAR*)sTemp, &dwSize)) == ERROR_SUCCESS)
+                if (::ExpandEnvironmentStringsW((const WCHAR*)sTemp, sValue) == 0)
+                    lResult = ::GetLastError();
         } else {
             // The value is not a string type.
-            return FALSE;
+            lResult = ERROR_INVALID_DATA;
         }
-    } else {
-        // The value with given name doesn't exist in this key.
-        return FALSE;
     }
+
+    return lResult;
+}
+
+
+inline LSTATUS RegQueryValueExA(__in HKEY hKey, __in_opt LPCSTR lpValueName, __reserved LPDWORD lpReserved, __out_opt LPDWORD lpType, __out ATL::CAtlArray<BYTE> &aData)
+{
+    LSTATUS lResult;
+    DWORD dwDataSize;
+
+    if ((lResult = RegQueryValueExA(hKey, lpValueName, lpReserved, NULL, NULL, &dwDataSize)) == ERROR_SUCCESS) {
+        if (!aData.SetCount(dwDataSize)) return ERROR_OUTOFMEMORY;
+        if ((lResult = RegQueryValueExA(hKey, lpValueName, lpReserved, lpType, aData.GetData(), &dwDataSize)) != ERROR_SUCCESS)
+            aData.SetCount(0);
+    }
+
+    return lResult;
+}
+
+
+inline LSTATUS RegQueryValueExW(__in HKEY hKey, __in_opt LPCWSTR lpValueName, __reserved LPDWORD lpReserved, __out_opt LPDWORD lpType, __out ATL::CAtlArray<BYTE> &aData)
+{
+    LSTATUS lResult;
+    DWORD dwDataSize;
+
+    if ((lResult = RegQueryValueExW(hKey, lpValueName, lpReserved, NULL, NULL, &dwDataSize)) == ERROR_SUCCESS) {
+        if (!aData.SetCount(dwDataSize)) return ERROR_OUTOFMEMORY;
+        if ((lResult = RegQueryValueExW(hKey, lpValueName, lpReserved, lpType, aData.GetData(), &dwDataSize)) != ERROR_SUCCESS)
+            aData.SetCount(0);
+    }
+
+    return lResult;
 }
