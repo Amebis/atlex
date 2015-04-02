@@ -168,7 +168,66 @@ inline BOOL GetFileVersionInfoW(__in LPCWSTR lptstrFilename, __reserved DWORD dw
 }
 
 
-inline BOOL RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCSTR pszName, _Inout_ ATL::CAtlStringA &sValue)
+inline DWORD ExpandEnvironmentStringsA(__in LPCSTR lpSrc, ATL::CAtlStringA &sValue)
+{
+    DWORD dwBufferSizeEst = (DWORD)strlen(lpSrc) + 0x100; // Initial estimate
+
+    for (;;) {
+        DWORD dwBufferSize = dwBufferSizeEst;
+        LPSTR szBuffer = sValue.GetBuffer(dwBufferSize);
+        if (!szBuffer) {
+            ::SetLastError(ERROR_OUTOFMEMORY);
+            return FALSE;
+        }
+        dwBufferSizeEst = ::ExpandEnvironmentStringsA(lpSrc, szBuffer, dwBufferSize);
+        if (dwBufferSizeEst > dwBufferSize) {
+            // The buffer was to small. Repeat with a bigger one.
+            sValue.ReleaseBuffer(0);
+        } else if (dwBufferSizeEst == 0) {
+            // Error.
+            sValue.ReleaseBuffer(0);
+            return 0;
+        } else {
+            // The buffer was sufficient. Break.
+            sValue.ReleaseBuffer();
+            sValue.FreeExtra();
+            return dwBufferSizeEst;
+        }
+    }
+}
+
+
+inline DWORD ExpandEnvironmentStringsW(__in LPCWSTR lpSrc, ATL::CAtlStringW &sValue)
+{
+    DWORD dwBufferSizeEst = (DWORD)wcslen(lpSrc) + 0x100; // Initial estimate
+
+    for (;;) {
+        DWORD dwBufferSize = dwBufferSizeEst;
+        LPWSTR szBuffer = sValue.GetBuffer(dwBufferSize);
+        if (!szBuffer) {
+            ::SetLastError(ERROR_OUTOFMEMORY);
+            return FALSE;
+        }
+        dwBufferSizeEst = ::ExpandEnvironmentStringsW(lpSrc, szBuffer, dwBufferSize);
+        if (dwBufferSizeEst > dwBufferSize) {
+            // The buffer was to small. Repeat with a bigger one.
+            sValue.ReleaseBuffer(0);
+        } else if (dwBufferSizeEst == 0) {
+            // Error.
+            sValue.ReleaseBuffer(0);
+            return 0;
+        } else {
+            // The buffer was sufficient. Break.
+            sValue.ReleaseBuffer();
+            sValue.FreeExtra();
+            return dwBufferSizeEst;
+        }
+    }
+}
+
+
+
+inline BOOL RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCSTR pszName, _Out_ ATL::CAtlStringA &sValue)
 {
     DWORD dwSize = 0;
     DWORD dwType;
@@ -178,6 +237,10 @@ inline BOOL RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCSTR pszName, _Inout_ A
         if (dwType == REG_SZ || dwType == REG_MULTI_SZ) {
             // The value is REG_SZ or REG_MULTI_SZ. Read it now.
             LPSTR szTemp = sValue.GetBuffer(dwSize / sizeof(TCHAR));
+            if (!szTemp) {
+                ::SetLastError(ERROR_OUTOFMEMORY);
+                return FALSE;
+            }
             if (::RegQueryValueExA(hReg, pszName, NULL, NULL, (LPBYTE)szTemp, &dwSize) == ERROR_SUCCESS) {
                 sValue.ReleaseBuffer();
                 return TRUE;
@@ -188,33 +251,10 @@ inline BOOL RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCSTR pszName, _Inout_ A
             }
         } else if (dwType == REG_EXPAND_SZ) {
             // The value is REG_EXPAND_SZ. Read it and expand environment variables.
-            LPSTR szTemp = (LPSTR)::LocalAlloc(LMEM_FIXED, dwSize);
-            if (!szTemp) AtlThrow(E_OUTOFMEMORY);
-            if (::RegQueryValueExA(hReg, pszName, NULL, NULL, (LPBYTE)szTemp, &dwSize) == ERROR_SUCCESS) {
-                // The value was read successfully. Now, expand the environment variables.
-                DWORD cCharFinal = dwSize / sizeof(TCHAR) + 0x100; // Initial estimate
-
-                for (;;) {
-                    DWORD cCharEx = cCharFinal;
-                    LPSTR szTempEx = sValue.GetBuffer(cCharEx);
-                    cCharFinal = ::ExpandEnvironmentStringsA(szTemp, szTempEx, cCharEx);
-                    if (cCharFinal > cCharEx) {
-                        // The buffer was to small. Repeat with a bigger one.
-                        sValue.ReleaseBuffer(0);
-                    } else {
-                        // The buffer was sufficient. Break.
-                        sValue.ReleaseBuffer();
-                        break;
-                    }
-                }
-
-                ::LocalFree(szTemp);
-                return TRUE;
-            } else {
-                // Reading of the value failed.
-                ::LocalFree(szTemp);
-                return FALSE;
-            }
+            ATL::CTempBuffer<CHAR> sTemp(dwSize / sizeof(CHAR));
+            return
+                ::RegQueryValueExA(hReg, pszName, NULL, NULL, (LPBYTE)(CHAR*)sTemp, &dwSize) == ERROR_SUCCESS &&
+                ::ExpandEnvironmentStringsA((const CHAR*)sTemp, sValue) != 0;
         } else {
             // The value is not a string type.
             return FALSE;
@@ -226,7 +266,7 @@ inline BOOL RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCSTR pszName, _Inout_ A
 }
 
 
-inline BOOL RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCWSTR pszName, _Inout_ ATL::CAtlStringW &sValue)
+inline BOOL RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCWSTR pszName, _Out_ ATL::CAtlStringW &sValue)
 {
     DWORD dwSize = 0;
     DWORD dwType;
@@ -236,6 +276,10 @@ inline BOOL RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCWSTR pszName, _Inout_ 
         if (dwType == REG_SZ || dwType == REG_MULTI_SZ) {
             // The value is REG_SZ or REG_MULTI_SZ. Read it now.
             LPWSTR szTemp = sValue.GetBuffer(dwSize / sizeof(TCHAR));
+            if (!szTemp) {
+                ::SetLastError(ERROR_OUTOFMEMORY);
+                return FALSE;
+            }
             if (::RegQueryValueExW(hReg, pszName, NULL, NULL, (LPBYTE)szTemp, &dwSize) == ERROR_SUCCESS) {
                 sValue.ReleaseBuffer();
                 return TRUE;
@@ -246,33 +290,10 @@ inline BOOL RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCWSTR pszName, _Inout_ 
             }
         } else if (dwType == REG_EXPAND_SZ) {
             // The value is REG_EXPAND_SZ. Read it and expand environment variables.
-            LPWSTR szTemp = (LPWSTR)::LocalAlloc(LMEM_FIXED, dwSize);
-            if (!szTemp) AtlThrow(E_OUTOFMEMORY);
-            if (::RegQueryValueExW(hReg, pszName, NULL, NULL, (LPBYTE)szTemp, &dwSize) == ERROR_SUCCESS) {
-                // The value was read successfully. Now, expand the environment variables.
-                DWORD cCharFinal = dwSize / sizeof(TCHAR) + 0x100; // Initial estimate
-
-                for (;;) {
-                    DWORD cCharEx = cCharFinal;
-                    LPWSTR szTempEx = sValue.GetBuffer(cCharEx);
-                    cCharFinal = ::ExpandEnvironmentStringsW(szTemp, szTempEx, cCharEx);
-                    if (cCharFinal > cCharEx) {
-                        // The buffer was to small. Repeat with a bigger one.
-                        sValue.ReleaseBuffer(0);
-                    } else {
-                        // The buffer was sufficient. Break.
-                        sValue.ReleaseBuffer();
-                        break;
-                    }
-                }
-
-                ::LocalFree(szTemp);
-                return TRUE;
-            } else {
-                // Reading of the value failed.
-                ::LocalFree(szTemp);
-                return FALSE;
-            }
+            ATL::CTempBuffer<WCHAR> sTemp(dwSize / sizeof(WCHAR));
+            return
+                ::RegQueryValueExW(hReg, pszName, NULL, NULL, (LPBYTE)(WCHAR*)sTemp, &dwSize) == ERROR_SUCCESS &&
+                ::ExpandEnvironmentStringsW((const WCHAR*)sTemp, sValue) != 0;
         } else {
             // The value is not a string type.
             return FALSE;
