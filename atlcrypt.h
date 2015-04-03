@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include "atlex.h"
+#include <atlcoll.h>
 #include <atlstr.h>
 #include <WinCrypt.h>
 
@@ -51,113 +53,148 @@ inline DWORD CertGetNameStringW(PCCERT_CONTEXT pCertContext, DWORD dwType, DWORD
 }
 
 
+inline BOOL CryptGetHashParam(__in HCRYPTHASH  hHash, __in DWORD dwParam, __out ATL::CAtlArray<BYTE> &aData, __in DWORD dwFlags)
+{
+    DWORD dwHashSize;
+
+    if (CryptGetHashParam(hHash, dwParam, NULL, &dwHashSize, dwFlags)) {
+        if (aData.SetCount(dwHashSize)) {
+            if (CryptGetHashParam(hHash, dwParam, aData.GetData(), &dwHashSize, dwFlags)) {
+                return TRUE;
+            } else {
+                aData.SetCount(0);
+                return FALSE;
+            }
+        } else {
+            SetLastError(ERROR_OUTOFMEMORY);
+            return FALSE;
+        }
+    } else
+        return FALSE;
+}
+
+
 namespace ATL
 {
     namespace Crypt
     {
-
         //
         // CCertContext
         //
-        class CCertContext
+        class CCertContext : public ATL::CHandleT<PCCERT_CONTEXT>
         {
         public:
-            inline CCertContext() throw() : m_pCertContext(NULL)
+            virtual ~CCertContext() throw()
             {
-            }
-
-            inline CCertContext(PCCERT_CONTEXT p) throw() : m_pCertContext(p)
-            {
-            }
-
-            inline ~CCertContext() throw()
-            {
-                if (m_pCertContext)
-                    CertFreeCertificateContext(m_pCertContext);
-            }
-
-            inline operator PCCERT_CONTEXT() const throw()
-            {
-                return m_pCertContext;
-            }
-
-            inline const CERT_CONTEXT& operator*() const
-            {
-                ATLENSURE(m_pCertContext != NULL);
-                return *m_pCertContext;
-            }
-
-            inline PCCERT_CONTEXT* operator&() throw()
-            {
-                ATLASSERT(m_pCertContext == NULL);
-                return &m_pCertContext;
-            }
-
-            inline PCCERT_CONTEXT operator->() const throw()
-            {
-                ATLASSERT(m_pCertContext != NULL);
-                return m_pCertContext;
-            }
-
-            inline bool operator!() const throw()
-            {
-                return m_pCertContext == NULL;
-            }
-
-            inline bool operator<(_In_opt_ PCCERT_CONTEXT p) const throw()
-            {
-                return m_pCertContext < p;
-            }
-
-            inline bool operator!=(_In_opt_ PCCERT_CONTEXT p) const
-            {
-                return !operator==(p);
-            }
-
-            inline bool operator==(_In_opt_ PCCERT_CONTEXT p) const throw()
-            {
-                return m_pCertContext == p;
-            }
-
-            inline void Attach(_In_opt_ PCCERT_CONTEXT p) throw()
-            {
-                if (m_pCertContext)
-                    CertFreeCertificateContext(m_pCertContext);
-                m_pCertContext = p;
-            }
-
-            inline PCCERT_CONTEXT Detach() throw()
-            {
-                PCCERT_CONTEXT p = m_pCertContext;
-                m_pCertContext = NULL;
-                return p;
+                if (m_h)
+                    CertFreeCertificateContext(m_h);
             }
 
             inline BOOL Create(_In_  DWORD dwCertEncodingType, _In_  const BYTE *pbCertEncoded, _In_  DWORD cbCertEncoded) throw()
             {
-                PCCERT_CONTEXT p;
-
-                p = CertCreateCertificateContext(dwCertEncodingType, pbCertEncoded, cbCertEncoded);
-                if (!p) return FALSE;
-
-                if (m_pCertContext)
-                    CertFreeCertificateContext(m_pCertContext);
-                m_pCertContext = p;
-                return TRUE;
-            }
-
-            inline BOOL Free() throw()
-            {
-                if (m_pCertContext) {
-                    BOOL bResult = CertFreeCertificateContext(m_pCertContext);
-                    m_pCertContext = NULL;
-                    return bResult;
-                } else
+                HANDLE h = CertCreateCertificateContext(dwCertEncodingType, pbCertEncoded, cbCertEncoded);
+                if (h) {
+                    Attach(h);
                     return TRUE;
+                } else
+                    return FALSE;
             }
 
         protected:
-            PCCERT_CONTEXT m_pCertContext;
+            virtual void InternalFree()
+            {
+                CertFreeCertificateContext(m_h);
+            }
+        };
+
+
+        //
+        // CCertStore
+        //
+        class CCertStore : public ATL::CHandleT<HCERTSTORE>
+        {
+        public:
+            virtual ~CCertStore() throw()
+            {
+                if (m_h)
+                    CertCloseStore(m_h, 0);
+            }
+
+            inline BOOL Create(__in LPCSTR lpszStoreProvider, __in DWORD dwEncodingType, __in_opt HCRYPTPROV_LEGACY hCryptProv, __in DWORD dwFlags, __in_opt const void *pvPara) throw()
+            {
+                HANDLE h = CertOpenStore(lpszStoreProvider, dwEncodingType, hCryptProv, dwFlags, pvPara);
+                if (h) {
+                    Attach(h);
+                    return TRUE;
+                } else
+                    return FALSE;
+            }
+
+        protected:
+            virtual void InternalFree()
+            {
+                CertCloseStore(m_h, 0);
+            }
+        };
+
+
+        //
+        // CContext
+        //
+        class CContext : public ATL::CHandleT<HCRYPTPROV>
+        {
+        public:
+            virtual ~CContext() throw()
+            {
+                if (m_h)
+                    CryptReleaseContext(m_h, 0);
+            }
+
+            inline BOOL Create(__in_opt LPCTSTR szContainer, __in_opt LPCTSTR szProvider, __in DWORD dwProvType, __in DWORD dwFlags) throw()
+            {
+                HANDLE h;
+                if (CryptAcquireContext(&h, szContainer, szProvider, dwProvType, dwFlags)) {
+                    Attach(h);
+                    return TRUE;
+                } else
+                    return FALSE;
+            }
+
+        protected:
+            virtual void InternalFree()
+            {
+                CryptReleaseContext(m_h, 0);
+            }
+        };
+
+
+        //
+        // CHash
+        //
+        class CHash : public ATL::CHandleT<HCRYPTHASH>
+        {
+        public:
+            virtual ~CHash() throw()
+            {
+                if (m_h)
+                    CryptDestroyHash(m_h);
+            }
+
+            inline BOOL Create(__in HCRYPTPROV  hProv, __in ALG_ID Algid, __in HCRYPTKEY hKey, __in DWORD dwFlags) throw()
+            {
+                HANDLE h;
+                if (CryptCreateHash(hProv, Algid, hKey, dwFlags, &h)) {
+                    Attach(h);
+                    return TRUE;
+                } else
+                    return FALSE;
+            }
+
+        protected:
+            virtual void InternalFree()
+            {
+                CryptDestroyHash(m_h);
+            }
         };
     }
 }

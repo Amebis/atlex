@@ -34,5 +34,8 @@
     <ClInclude Include="atlshlwapi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="atlex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
