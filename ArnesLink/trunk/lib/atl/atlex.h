@@ -25,19 +25,19 @@
 namespace ATL
 {
     //
-    // CHandleT
+    // CObjectWithHandleT
     //
     template <class T>
-    class CHandleT
+    class CObjectWithHandleT
     {
     public:
         typedef T HANDLE;
 
-        inline CHandleT() throw() : m_h(NULL)
+        inline CObjectWithHandleT() throw() : m_h(NULL)
         {
         }
 
-        inline CHandleT(T h) throw() : m_h(h)
+        inline CObjectWithHandleT(T h) throw() : m_h(h)
         {
         }
 

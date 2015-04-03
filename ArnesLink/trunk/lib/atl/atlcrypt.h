@@ -74,6 +74,27 @@ inline BOOL CryptGetHashParam(__in HCRYPTHASH  hHash, __in DWORD dwParam, __out 
 }
 
 
+inline BOOL CryptExportKey(__in HCRYPTKEY hKey, __in HCRYPTKEY hExpKey, __in DWORD dwBlobType, __in DWORD dwFlags, __out ATL::CAtlArray<BYTE> &aData)
+{
+    DWORD dwKeyBLOBSize;
+
+    if (CryptExportKey(hKey, hExpKey, dwBlobType, dwFlags, NULL, &dwKeyBLOBSize)) {
+        if (aData.SetCount(dwKeyBLOBSize)) {
+            if (CryptExportKey(hKey, hExpKey, dwBlobType, dwFlags, aData.GetData(), &dwKeyBLOBSize)) {
+                return TRUE;
+            } else {
+                aData.SetCount(0);
+                return FALSE;
+            }
+        } else {
+            SetLastError(ERROR_OUTOFMEMORY);
+            return FALSE;
+        }
+    } else
+        return FALSE;
+}
+
+
 namespace ATL
 {
     namespace Crypt
@@ -81,7 +102,7 @@ namespace ATL
         //
         // CCertContext
         //
-        class CCertContext : public ATL::CHandleT<PCCERT_CONTEXT>
+        class CCertContext : public ATL::CObjectWithHandleT<PCCERT_CONTEXT>
         {
         public:
             virtual ~CCertContext() throw()
@@ -111,7 +132,7 @@ namespace ATL
         //
         // CCertStore
         //
-        class CCertStore : public ATL::CHandleT<HCERTSTORE>
+        class CCertStore : public ATL::CObjectWithHandleT<HCERTSTORE>
         {
         public:
             virtual ~CCertStore() throw()
@@ -141,7 +162,7 @@ namespace ATL
         //
         // CContext
         //
-        class CContext : public ATL::CHandleT<HCRYPTPROV>
+        class CContext : public ATL::CObjectWithHandleT<HCRYPTPROV>
         {
         public:
             virtual ~CContext() throw()
@@ -171,7 +192,7 @@ namespace ATL
         //
         // CHash
         //
-        class CHash : public ATL::CHandleT<HCRYPTHASH>
+        class CHash : public ATL::CObjectWithHandleT<HCRYPTHASH>
         {
         public:
             virtual ~CHash() throw()
@@ -194,6 +215,56 @@ namespace ATL
             virtual void InternalFree()
             {
                 CryptDestroyHash(m_h);
+            }
+        };
+
+
+        //
+        // CKey
+        //
+        class CKey : public ATL::CObjectWithHandleT<HCRYPTKEY>
+        {
+        public:
+            virtual ~CKey() throw()
+            {
+                if (m_h)
+                    CryptDestroyKey(m_h);
+            }
+
+            inline BOOL Generate(__in HCRYPTPROV hProv, __in ALG_ID Algid, __in DWORD dwFlags) throw()
+            {
+                HANDLE h;
+                if (CryptGenKey(hProv, Algid, dwFlags, &h)) {
+                    Attach(h);
+                    return TRUE;
+                } else
+                    return FALSE;
+            }
+
+            inline BOOL Import(__in HCRYPTPROV hProv, __in_bcount(dwDataLen) CONST BYTE *pbData, __in DWORD dwDataLen, __in HCRYPTKEY hPubKey, __in DWORD dwFlags) throw()
+            {
+                HANDLE h;
+                if (CryptImportKey(hProv, pbData, dwDataLen, hPubKey, dwFlags, &h)) {
+                    Attach(h);
+                    return TRUE;
+                } else
+                    return FALSE;
+            }
+
+            inline BOOL ImportPublic(__in HCRYPTPROV hCryptProv, __in DWORD dwCertEncodingType, __in PCERT_PUBLIC_KEY_INFO pInfo) throw()
+            {
+                HANDLE h;
+                if (CryptImportPublicKeyInfo(hCryptProv, dwCertEncodingType, pInfo, &h)) {
+                    Attach(h);
+                    return TRUE;
+                } else
+                    return FALSE;
+            }
+
+        protected:
+            virtual void InternalFree()
+            {
+                CryptDestroyKey(m_h);
             }
         };
     }
