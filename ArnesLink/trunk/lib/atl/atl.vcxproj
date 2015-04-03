@@ -104,6 +104,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="atlcrypt.h" />
+    <ClInclude Include="atlex.h" />
     <ClInclude Include="atlmsi.h" />
     <ClInclude Include="atlshlwapi.h" />
     <ClInclude Include="atlwin.h" />
