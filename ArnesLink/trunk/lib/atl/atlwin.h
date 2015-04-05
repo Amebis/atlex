@@ -101,7 +101,10 @@ inline int GetWindowTextA(__in HWND hWnd, __out ATL::CAtlStringA &sValue)
     if (iResult > 0) {
         // Prepare the buffer and read the string data into it.
         LPSTR szBuffer = sValue.GetBuffer(iResult++);
-        if (!szBuffer) return 0;
+        if (!szBuffer) {
+            SetLastError(ERROR_OUTOFMEMORY);
+            return 0;
+        }
         iResult = ::GetWindowTextA(hWnd, szBuffer, iResult);
         sValue.ReleaseBuffer(iResult);
         return iResult;
@@ -122,7 +125,10 @@ inline int GetWindowTextW(__in HWND hWnd, __out ATL::CAtlStringW &sValue)
     if (iResult > 0) {
         // Prepare the buffer and read the string data into it.
         LPWSTR szBuffer = sValue.GetBuffer(iResult++);
-        if (!szBuffer) return 0;
+        if (!szBuffer) {
+            SetLastError(ERROR_OUTOFMEMORY);
+            return 0;
+        }
         iResult = ::GetWindowTextW(hWnd, szBuffer, iResult);
         sValue.ReleaseBuffer(iResult);
         return iResult;
