@@ -232,6 +232,27 @@ inline DWORD ExpandEnvironmentStringsW(__in LPCWSTR lpSrc, ATL::CAtlStringW &sVa
 }
 
 
+inline VOID GuidToString(_In_ LPCGUID lpGuid, ATL::CAtlStringA &str)
+{
+    str.Format("{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
+        lpGuid->Data1,
+        lpGuid->Data2,
+        lpGuid->Data3,
+        lpGuid->Data4[0], lpGuid->Data4[1],
+        lpGuid->Data4[2], lpGuid->Data4[3], lpGuid->Data4[4], lpGuid->Data4[5], lpGuid->Data4[6], lpGuid->Data4[7]);
+}
+
+
+inline VOID GuidToString(_In_ LPCGUID lpGuid, ATL::CAtlStringW &str)
+{
+    str.Format(L"{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
+        lpGuid->Data1,
+        lpGuid->Data2,
+        lpGuid->Data3,
+        lpGuid->Data4[0], lpGuid->Data4[1],
+        lpGuid->Data4[2], lpGuid->Data4[3], lpGuid->Data4[4], lpGuid->Data4[5], lpGuid->Data4[6], lpGuid->Data4[7]);
+}
+
 
 inline LSTATUS RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCSTR pszName, _Out_ ATL::CAtlStringA &sValue)
 {
