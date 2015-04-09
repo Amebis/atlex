@@ -102,7 +102,7 @@ namespace ATL
         //
         // CCertContext
         //
-        class CCertContext : public ATL::CObjectWithHandleT<PCCERT_CONTEXT>
+        class CCertContext : public ATL::CObjectWithHandleDuplT<PCCERT_CONTEXT>
         {
         public:
             virtual ~CCertContext() throw()
@@ -125,6 +125,46 @@ namespace ATL
             virtual void InternalFree()
             {
                 CertFreeCertificateContext(m_h);
+            }
+
+            virtual HANDLE InternalDuplicate(HANDLE h) const
+            {
+                return CertDuplicateCertificateContext(h);
+            }
+        };
+
+
+        //
+        // CCertChainContext
+        //
+        class CCertChainContext : public ATL::CObjectWithHandleDuplT<PCCERT_CHAIN_CONTEXT>
+        {
+        public:
+            virtual ~CCertChainContext() throw()
+            {
+                if (m_h)
+                    CertFreeCertificateChain(m_h);
+            }
+
+            inline BOOL Create(__in_opt HCERTCHAINENGINE hChainEngine, __in PCCERT_CONTEXT pCertContext, __in_opt LPFILETIME pTime, __in_opt HCERTSTORE hAdditionalStore, __in PCERT_CHAIN_PARA pChainPara, __in DWORD dwFlags, __reserved LPVOID pvReserved) throw()
+            {
+                HANDLE h;
+                if (CertGetCertificateChain(hChainEngine, pCertContext, pTime, hAdditionalStore, pChainPara, dwFlags, pvReserved, &h)) {
+                    Attach(h);
+                    return TRUE;
+                } else
+                    return FALSE;
+            }
+
+        protected:
+            virtual void InternalFree()
+            {
+                CertFreeCertificateChain(m_h);
+            }
+
+            virtual HANDLE InternalDuplicate(HANDLE h) const
+            {
+                return CertDuplicateCertificateChain(h);
             }
         };
 
