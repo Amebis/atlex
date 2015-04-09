@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include "atlex.h"
 #include <atlcoll.h>
 #include <atlstr.h>
 #include <Windows.h>
@@ -347,4 +348,76 @@ inline LSTATUS RegQueryValueExW(__in HKEY hKey, __in_opt LPCWSTR lpValueName, __
     }
 
     return lResult;
+}
+
+
+#if _WIN32_WINNT >= _WIN32_WINNT_VISTA
+
+inline LSTATUS RegLoadMUIStringA(__in HKEY hKey, __in_opt LPCSTR pszValue, __out ATL::CAtlStringA &sOut, __in DWORD Flags, __in_opt LPCSTR pszDirectory)
+{
+    LSTATUS lResult;
+    DWORD dwSize;
+
+    Flags &= ~REG_MUI_STRING_TRUNCATE;
+
+    lResult = RegLoadMUIStringA(hKey, pszValue, NULL, 0, &dwSize, Flags, pszDirectory);
+    if (lResult == ERROR_MORE_DATA) {
+        LPSTR szBuffer = sOut.GetBuffer(dwSize - 1);
+        if (!szBuffer) return ERROR_OUTOFMEMORY;
+        sOut.ReleaseBuffer((lResult = RegLoadMUIStringA(hKey, pszValue, szBuffer, dwSize, &dwSize, Flags, pszDirectory)) == ERROR_SUCCESS ? dwSize - 1 : 0);
+    } else if (lResult == ERROR_SUCCESS)
+        sOut.Empty();
+
+    return lResult;
+}
+
+
+inline LSTATUS RegLoadMUIStringW(__in HKEY hKey, __in_opt LPCWSTR pszValue, __out ATL::CAtlStringW &sOut, __in DWORD Flags, __in_opt LPCWSTR pszDirectory)
+{
+    LSTATUS lResult;
+    DWORD dwSize;
+
+    Flags &= ~REG_MUI_STRING_TRUNCATE;
+
+    lResult = RegLoadMUIStringW(hKey, pszValue, NULL, 0, &dwSize, Flags, pszDirectory);
+    if (lResult == ERROR_MORE_DATA) {
+        LPWSTR szBuffer = sOut.GetBuffer(dwSize - 1);
+        if (!szBuffer) return ERROR_OUTOFMEMORY;
+        sOut.ReleaseBuffer((lResult = RegLoadMUIStringW(hKey, pszValue, szBuffer, dwSize, &dwSize, Flags, pszDirectory)) == ERROR_SUCCESS ? dwSize - 1 : 0);
+    } else if (lResult == ERROR_SUCCESS)
+        sOut.Empty();
+
+    return lResult;
+}
+
+#endif
+
+
+namespace ATL
+{
+    class CAtlLibrary : public CObjectWithHandleT<HMODULE>
+    {
+    public:
+        virtual ~CAtlLibrary() throw()
+        {
+            if (m_h)
+                FreeLibrary(m_h);
+        }
+
+        inline BOOL Load(__in LPCTSTR lpFileName, __reserved HANDLE hFile, __in DWORD dwFlags) throw()
+        {
+            HANDLE h = LoadLibraryEx(lpFileName, hFile, dwFlags);
+            if (h) {
+                Attach(h);
+                return TRUE;
+            } else
+                return FALSE;
+        }
+
+    protected:
+        virtual void InternalFree()
+        {
+            FreeLibrary(m_h);
+        }
+    };
 }

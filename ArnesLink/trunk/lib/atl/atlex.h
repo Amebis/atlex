@@ -20,6 +20,7 @@
 #pragma once
 
 #include <atldef.h>
+#include <atlstr.h>
 
 
 namespace ATL
@@ -37,28 +38,28 @@ namespace ATL
         {
         }
 
-        inline CObjectWithHandleT(T h) throw() : m_h(h)
+        inline CObjectWithHandleT(HANDLE h) throw() : m_h(h)
         {
         }
 
-        inline operator T() const throw()
+        inline operator HANDLE() const throw()
         {
             return m_h;
         }
 
-        inline T*& operator*() const
+        inline HANDLE*& operator*() const
         {
             ATLENSURE(m_h != NULL);
             return *m_h;
         }
 
-        inline T* operator&() throw()
+        inline HANDLE* operator&() throw()
         {
             ATLASSERT(m_h == NULL);
             return &m_h;
         }
 
-        inline T operator->() const throw()
+        inline HANDLE operator->() const throw()
         {
             ATLASSERT(m_h != NULL);
             return m_h;
@@ -69,31 +70,31 @@ namespace ATL
             return m_h == NULL;
         }
 
-        inline bool operator<(_In_opt_ T h) const throw()
+        inline bool operator<(_In_opt_ HANDLE h) const throw()
         {
             return m_h < h;
         }
 
-        inline bool operator!=(_In_opt_ T h) const
+        inline bool operator!=(_In_opt_ HANDLE h) const
         {
             return !operator==(h);
         }
 
-        inline bool operator==(_In_opt_ T h) const throw()
+        inline bool operator==(_In_opt_ HANDLE h) const throw()
         {
             return m_h == h;
         }
 
-        inline void Attach(_In_opt_ T h) throw()
+        inline void Attach(_In_opt_ HANDLE h) throw()
         {
             if (m_h)
                 InternalFree();
             m_h = h;
         }
 
-        inline T Detach() throw()
+        inline HANDLE Detach() throw()
         {
-            T h = m_h;
+            HANDLE h = m_h;
             m_h = NULL;
             return h;
         }
@@ -110,6 +111,160 @@ namespace ATL
         virtual void InternalFree() = 0;
 
     protected:
-        T m_h;
+        HANDLE m_h;
     };
+
+
+    //
+    // CObjectWithHandleDuplT
+    //
+    template <class T>
+    class CObjectWithHandleDuplT : public CObjectWithHandleT<T>
+    {
+    public:
+        inline HANDLE GetDuplicate() const
+        {
+            return m_h ? InternalDuplicate(m_h) : NULL;
+        }
+
+        inline BOOL DuplicateAndAttach(_In_opt_ HANDLE h) throw()
+        {
+            if (m_h)
+                InternalFree();
+
+            return h ? (m_h = InternalDuplicate(h)) != NULL : (m_h = NULL, TRUE);
+        }
+
+        //
+        // Do not allow = operators. They are semantically ambigious:
+        // Do they attach the class to the existing instance of object, or do they duplicate it?
+        // To avoid confusion, user should use Attach() and Duplicate() methods explicitly.
+        //
+        //inline const CObjectWithHandleDuplT<T>& operator=(_In_ const HANDLE src)
+        //{
+        //    Attach(src ? InternalDuplicate(src) : NULL);
+        //    return *this;
+        //}
+
+        //inline const CObjectWithHandleDuplT<T>& operator=(_In_ const CObjectWithHandleDuplT<T> &src)
+        //{
+        //    Attach(src.m_h ? InternalDuplicate(src.m_h) : NULL);
+        //    return *this;
+        //}
+
+    protected:
+        virtual HANDLE InternalDuplicate(HANDLE h) const = 0;
+    };
+
+
+    //
+    // CStrFormatT, CStrFormatW, CStrFormatA, CStrFormat
+    //
+    template<typename BaseType, class StringTraits>
+    class CStrFormatT : public CStringT<BaseType, StringTraits>
+    {
+    public:
+        CStrFormatT(_In_z_ _FormatMessage_format_string_ PCXSTR pszFormat, ...)
+        {
+            ATLASSERT(AtlIsValidString(pszFormat));
+
+            va_list argList;
+            va_start(argList, pszFormat);
+            FormatV(pszFormat, argList);
+            va_end(argList);
+        }
+
+        CStrFormatT(_In_ _FormatMessage_format_string_ UINT nFormatID, ...)
+        {
+            CStringT strFormat(GetManager());
+            ATLENSURE(strFormat.LoadString(nFormatID));
+
+            va_list argList;
+            va_start(argList, nFormatID);
+            FormatV(strFormat, argList);
+            va_end(argList);
+        }
+
+        CStrFormatT(_In_ HINSTANCE hInstance, _In_ _FormatMessage_format_string_ UINT nFormatID, ...)
+        {
+            CStringT strFormat(GetManager());
+            ATLENSURE(strFormat.LoadString(hInstance, nFormatID));
+
+            va_list argList;
+            va_start(argList, nFormatID);
+            FormatV(strFormat, argList);
+            va_end(argList);
+        }
+
+        CStrFormatT(_In_ HINSTANCE hInstance, _In_ WORD wLanguageID, _In_ _FormatMessage_format_string_ UINT nFormatID, ...)
+        {
+            CStringT strFormat(GetManager());
+            ATLENSURE(strFormat.LoadString(hInstance, nFormatID, wLanguageID));
+
+            va_list argList;
+            va_start(argList, nFormatID);
+            FormatV(strFormat, argList);
+            va_end(argList);
+        }
+    };
+
+    typedef CStrFormatT< wchar_t, StrTraitATL< wchar_t, ChTraitsCRT< wchar_t > > > CStrFormatW;
+    typedef CStrFormatT< char, StrTraitATL< char, ChTraitsCRT< char > > > CStrFormatA;
+    typedef CStrFormatT< TCHAR, StrTraitATL< TCHAR, ChTraitsCRT< TCHAR > > > CStrFormat;
+
+
+    //
+    // CStrFormatMsgT, CStrFormatMsgW, CStrFormatMsgA, CStrFormatMsg
+    //
+    template<typename BaseType, class StringTraits>
+    class CStrFormatMsgT : public CStringT<BaseType, StringTraits>
+    {
+    public:
+        CStrFormatMsgT(_In_z_ _FormatMessage_format_string_ PCXSTR pszFormat, ...)
+        {
+            ATLASSERT(AtlIsValidString(pszFormat));
+
+            va_list argList;
+            va_start(argList, pszFormat);
+            FormatMessageV(pszFormat, &argList);
+            va_end(argList);
+        }
+
+        CStrFormatMsgT(_In_ _FormatMessage_format_string_ UINT nFormatID, ...)
+        {
+            CStringT strFormat(GetManager());
+            ATLENSURE(strFormat.LoadString(nFormatID));
+
+            va_list argList;
+            va_start(argList, nFormatID);
+            FormatMessageV(strFormat, &argList);
+            va_end(argList);
+        }
+
+        CStrFormatMsgT(_In_ HINSTANCE hInstance, _In_ _FormatMessage_format_string_ UINT nFormatID, ...)
+        {
+            CStringT strFormat(GetManager());
+            ATLENSURE(strFormat.LoadString(hInstance, nFormatID));
+
+            va_list argList;
+            va_start(argList, nFormatID);
+            FormatMessageV(strFormat, &argList);
+            va_end(argList);
+        }
+
+        CStrFormatMsgT(_In_ HINSTANCE hInstance, _In_ WORD wLanguageID, _In_ _FormatMessage_format_string_ UINT nFormatID, ...)
+        {
+            CStringT strFormat(GetManager());
+            ATLENSURE(strFormat.LoadString(hInstance, nFormatID, wLanguageID));
+
+            va_list argList;
+            va_start(argList, nFormatID);
+            FormatMessageV(strFormat, &argList);
+            va_end(argList);
+        }
+    };
+
+    typedef CStrFormatMsgT< wchar_t, StrTraitATL< wchar_t, ChTraitsCRT< wchar_t > > > CStrFormatMsgW;
+    typedef CStrFormatMsgT< char, StrTraitATL< char, ChTraitsCRT< char > > > CStrFormatMsgA;
+    typedef CStrFormatMsgT< TCHAR, StrTraitATL< TCHAR, ChTraitsCRT< TCHAR > > > CStrFormatMsg;
 }
