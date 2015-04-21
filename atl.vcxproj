@@ -107,6 +107,7 @@
     <ClInclude Include="atleap.h" />
     <ClInclude Include="atlex.h" />
     <ClInclude Include="atlmsi.h" />
+    <ClInclude Include="atlsec.h" />
     <ClInclude Include="atlshlwapi.h" />
     <ClInclude Include="atlwin.h" />
     <ClInclude Include="atlwlan.h" />

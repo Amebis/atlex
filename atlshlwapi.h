@@ -32,7 +32,7 @@ inline BOOL PathCanonicalizeA(__out ATL::CAtlStringA &sValue, __in LPCSTR pszPat
         return FALSE;
     }
     BOOL bResult = ::PathCanonicalizeA(szBuffer, pszPath);
-    sValue.ReleaseBuffer(bResult ? strnlen(szBuffer, MAX_PATH) : 0);
+    sValue.ReleaseBuffer(bResult ? (int)strnlen(szBuffer, MAX_PATH) : 0);
     sValue.FreeExtra();
     return bResult;
 }
@@ -47,7 +47,7 @@ inline BOOL PathCanonicalizeW(__out ATL::CAtlStringW &sValue, __in LPCWSTR pszPa
         return FALSE;
     }
     BOOL bResult = ::PathCanonicalizeW(szBuffer, pszPath);
-    sValue.ReleaseBuffer(bResult ? wcsnlen(szBuffer, MAX_PATH) : 0);
+    sValue.ReleaseBuffer(bResult ? (int)wcsnlen(szBuffer, MAX_PATH) : 0);
     sValue.FreeExtra();
     return bResult;
 }

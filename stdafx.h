@@ -22,4 +22,12 @@
 #include "atlwin.h"
 
 #include "atlcrypt.h"
+#include "atleap.h"
+#include "atlex.h"
 #include "atlmsi.h"
+#if defined(SECURITY_WIN32) || defined(SECURITY_KERNEL) || defined(SECURITY_MAC)
+#include "atlsec.h"
+#endif
+#include "atlshlwapi.h"
+#include "atlwin.h"
+#include "atlwlan.h"
