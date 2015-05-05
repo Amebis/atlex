@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 1991-2015 Amebis
+
+    This file is part of rcxgettext.
+
+    rcxgettext is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    rcxgettext is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with rcxgettext. If not, see <http://www.gnu.org/licenses/>.
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml" />
+    <AvailableItemName Include="ResourceLocalizator">
+      <Targets>ResourceLocalization</Targets>
+    </AvailableItemName>
+    <AvailableItemName Include="MessageLocalizator">
+      <Targets>MessageLocalization</Targets>
+    </AvailableItemName>
+  </ItemGroup>
+  <UsingTask TaskName="ResourceLocalizator" TaskFactory="XamlTaskFactory" AssemblyName="Microsoft.Build.Tasks.v4.0">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <UsingTask TaskName="MessageLocalizator" TaskFactory="XamlTaskFactory" AssemblyName="Microsoft.Build.Tasks.v4.0">
+    <Task>$(MSBuildThisFileDirectory)$(MSBuildThisFileName).xml</Task>
+  </UsingTask>
+  <Target
+    Name="ResourceLocalization"
+    BeforeTargets="$(ResourceLocalizationBeforeTargets)"
+    AfterTargets="$(ResourceLocalizationAfterTargets)"
+    Condition="'@(ResourceLocalizator)' != ''"
+    DependsOnTargets="$(ResourceLocalizationDependsOn)"
+    Inputs="@(ResourceLocalizator);%(ResourceLocalizator.LanguageCatalogs);$(MSBuildProjectFile)"
+    Outputs="%(ResourceLocalizator.OutputFile)"
+  >
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <ResourceLocalizator Remove="@(ResourceLocalizator)" Condition="'%(Identity)' != '@(SelectedFiles)'" />
+    </ItemGroup>
+    <Message Text="Localizing resources..." />
+    <ResourceLocalizator
+      Condition="'@(ResourceLocalizator)' != '' and '%(ResourceLocalizator.ExcludedFromBuild)' != 'true'"
+      CommandLineTemplate="%(ResourceLocalizator.CommandLineTemplate)"
+      OutputFile="%(ResourceLocalizator.OutputFile)"
+      Inputs="@(ResourceLocalizator)"
+      LanguageCatalogs="%(ResourceLocalizator.LanguageCatalogs)"
+      AdditionalOptions="%(ResourceLocalizator.AdditionalOptions)" />
+  </Target>
+  <Target Name="ResourceLocalizationClean">
+    <Delete Files="%(ResourceLocalizator.OutputFile)" ContinueOnError="true" />
+  </Target>
+  <PropertyGroup>
+    <CleanDependsOn>ResourceLocalizationClean;$(CleanDependsOn);</CleanDependsOn>
+  </PropertyGroup>
+  <Target
+    Name="MessageLocalization"
+    BeforeTargets="$(MessageLocalizationBeforeTargets)"
+    AfterTargets="$(MessageLocalizationAfterTargets)"
+    Condition="'@(MessageLocalizator)' != ''"
+    DependsOnTargets="$(MessageLocalizationDependsOn)"
+    Inputs="@(MessageLocalizator);%(MessageLocalizator.LanguageCatalogs);$(MSBuildProjectFile)"
+    Outputs="$(IntDir)%(Filename).dbg;$(IntDir)%(Filename).h;$(IntDir)%(Filename).mc;$(IntDir)%(Filename).rc"
+  >
+    <ItemGroup Condition="'@(SelectedFiles)' != ''">
+      <MessageLocalizator Remove="@(MessageLocalizator)" Condition="'%(Identity)' != '@(SelectedFiles)'" />
+    </ItemGroup>
+    <Message Text="Localizing and compiling messages..." />
+    <MessageLocalizator
+      Condition="'@(MessageLocalizator)' != '' and '%(MessageLocalizator.ExcludedFromBuild)' != 'true'"
+      CommandLineTemplate="%(MessageLocalizator.CommandLineTemplate)"
+      Inputs="@(MessageLocalizator)" 
+      LanguageCatalogs="%(MessageLocalizator.LanguageCatalogs)"
+      AdditionalOptions="%(MessageLocalizator.AdditionalOptions)" />
+  </Target>
+  <Target Name="MessageLocalizationClean">
+    <Delete Files="$(IntDir)%(Filename).dbg;$(IntDir)%(Filename).h;$(IntDir)%(Filename).mc;$(IntDir)%(Filename).rc" ContinueOnError="true" />
+  </Target>
+  <PropertyGroup>
+    <CleanDependsOn>ResourceLocalizationClean;$(CleanDependsOn);</CleanDependsOn>
+  </PropertyGroup>
+</Project>

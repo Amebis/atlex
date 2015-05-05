@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 1991-2015 Amebis
+
+    This file is part of rcxgettext.
+
+    rcxgettext is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    rcxgettext is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with rcxgettext. If not, see <http://www.gnu.org/licenses/>.
+-->
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(ResourceLocalizationBeforeTargets)' == '' and '$(ResourceLocalizationAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <ResourceLocalizationBeforeTargets>Midl</ResourceLocalizationBeforeTargets>
+    <ResourceLocalizationAfterTargets>CustomBuild</ResourceLocalizationAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ResourceLocalizationDependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(ResourceLocalizationDependsOn)</ResourceLocalizationDependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ResourceLocalizator>
+      <OutputFile>$(IntDir)%(Filename).rc2</OutputFile>
+      <CommandLineTemplate>rcxgettext.exe rcp[OutputFile] [Inputs][LanguageCatalogs][AdditionalOptions]</CommandLineTemplate>
+    </ResourceLocalizator>
+  </ItemDefinitionGroup>
+  <PropertyGroup Condition="'$(MessageLocalizationBeforeTargets)' == '' and '$(MessageLocalizationAfterTargets)' == '' and '$(ConfigurationType)' != 'Makefile'">
+    <MessageLocalizationBeforeTargets>Midl</MessageLocalizationBeforeTargets>
+    <MessageLocalizationAfterTargets>CustomBuild</MessageLocalizationAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup>
+    <MessageLocalizationDependsOn Condition="'$(ConfigurationType)' != 'Makefile'">_SelectedFiles;$(MessageLocalizationDependsOn)</MessageLocalizationDependsOn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <MessageLocalizator>
+      <CommandLineTemplate>rcxgettext.exe mcp "$(IntDir)%(Filename).mc" [Inputs][LanguageCatalogs]
+if errorlevel 1 goto VCEnd
+mc.exe "$(IntDir)%(Filename).mc" -u -e "h" -h "$(IntDir)." -x "$(IntDir)." -n -r "$(IntDir)."
+:VCEnd</CommandLineTemplate>
+    </MessageLocalizator>
+  </ItemDefinitionGroup>
+</Project>

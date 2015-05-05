@@ -1,0 +1,610 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ArnesLink\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-04-25 16:49+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Simon Rozman <simon.rozman@amebis.si>\n"
+"Language-Team: Amebis, d. o. o., Kamnik <simon.rozman@amebis.si>\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-Basepath: ..\n"
+"X-Generator: Poedit 1.7.6\n"
+"X-Poedit-SearchPath-0: res\n"
+
+#: res/resource.rcx:392
+msgid "&Back"
+msgstr "Nazaj"
+
+#: res/resource.rcx:247
+msgid "&Browse"
+msgstr "Pre&brskaj"
+
+#: res/resource.rcx:220
+msgid "&Certificate hierarchy:"
+msgstr "Hierarhija potrdil:"
+
+#: res/resource.rcx:164
+msgid "&Custom outer identity:"
+msgstr "Zunanja identiteta po meri:"
+
+#: res/resource.rcx:394
+msgid "&Finish"
+msgstr "Končaj"
+
+#: res/resource.rcx:148
+msgid "&MSCHAPv2"
+msgstr "&MSCHAPv2"
+
+#: res/resource.rcx:393
+msgid "&Next"
+msgstr "&Naprej"
+
+#: res/resource.rcx:147
+msgid "&PAP"
+msgstr "&PAP"
+
+#: res/resource.rcx:263
+msgid "&Prompt for Credentials on Connect"
+msgstr "&Pozovi za poverilnice ob povezovanju"
+
+#: res/resource.rcx:199
+msgid "&Remember my credentials"
+msgstr "Zapomni si moje pove&rilnice"
+
+#: res/resource.rcx:174
+msgid "&Remove CA"
+msgstr "Odst&rani CA"
+
+#: res/resource.rcx:226
+msgid "&Retry"
+msgstr "Ponovi"
+
+#: res/resource.rcx:162
+msgid "&Same as inner identity"
+msgstr "I&sta kot notranja identiteta"
+
+#: res/resource.rcx:374
+msgid "&Select"
+msgstr "Izberi"
+
+#: res/resource.rcx:225
+msgid "&Trust"
+msgstr "Zaupaj"
+
+#: res/resource.rcx:177
+msgid "(Example: foo.bar.com;*.domain.org)"
+msgstr "(Primer: kar.nekaj.si;*.domena.org)"
+
+#: res/resource.rcx:154
+msgid "(Leave blank to prompt for credentials.)"
+msgstr "(Pustite prazno, če želite poziv za poverilnice.)"
+
+#: res/resource.rcx:238
+msgid "<a href=\"clipboard:copy\">C&opy to clipboard</a>"
+msgstr "<a href=\"clipboard:copy\">K&opiraj na odložišče</a>"
+
+# Language Code and Windows Charset (hexadecimal)
+# If we do not intend to provide different localization of same base language (like merging Portugal Portugeese and Brasil Portugese into the same Portugeese), use the code of Microsoft defined default sublanguage.
+# For example: Use LANG_PORTUGUESE + SUBLANG_DEFAULT = 0x416, although 0x416 represents Brasil Portugese (too).
+#: res/resource.rcx:83
+msgid "040904e4"
+msgstr "042404e2"
+
+# Language Code (hexadecimal)
+# If we do not intend to provide different localization of same base language (like merging Portugal Portugeese and Brasil Portugese into the same Portugeese), use the code of Microsoft defined default sublanguage.
+# For example: Use LANG_PORTUGUESE + SUBLANG_DEFAULT = 0x416, although 0x416 represents Brasil Portugese (too).
+#: res/resource.rcx:101
+msgid "0x409"
+msgstr "0x424"
+
+# Windows charset for this language (decimal)
+#: res/resource.rcx:101
+msgid "1252"
+msgstr "1250"
+
+#: res/resource.rcx:171
+msgid "Acceptable Certificate Authorities:"
+msgstr "Sprejemljivi izdajatelji potrdil (CA):"
+
+#: res/resource.rcx:175
+msgid "Acceptable server &names:"
+msgstr "Sprejemljiva ime&na strežnika:"
+
+#: res/resource.rcx:173
+msgid "Add CA"
+msgstr "Dodaj CA"
+
+#: res/resource.rcx:378
+msgid "Add Certificate"
+msgstr "Dodaj potrdilo"
+
+# The name of the constant in RC to include the resources in this language
+#: res/resource.rcx:100 res/resource.rcx:115 res/resource.rcx:82
+msgid "AFX_TARG_ENU"
+msgstr "AFX_TARG_SLV"
+
+#: res/resource.rcx:369
+msgid "All Files"
+msgstr "Vse datoteke"
+
+#: res/resource.rcx:85
+msgid "ARNES & Amebis, Slovenia"
+msgstr "ARNES in Amebis, Slovenija"
+
+#: res/resource.rcx:88 res/resource.rcx:90
+msgid "ArnesLink"
+msgstr "ArnesLink"
+
+#: res/resource.rcx:207
+msgid "ArnesLink - Unknown Server Certificate"
+msgstr "ArnesLink - Neznano strežnikovo potrdilo"
+
+#: res/resource.rcx:322
+msgid "ArnesLink Alert"
+msgstr "Opozorilo ArnesLink"
+
+#: res/resource.rcx:370
+msgid "ArnesLink Configuration Files"
+msgstr "Datoteke nastavitev ArnesLink"
+
+#: res/resource.rcx:187
+msgid "ArnesLink Credentials"
+msgstr "Poverilnice ArnesLink"
+
+#: res/resource.rcx:367
+msgid "ArnesLink EAP session is complete."
+msgstr "Seja ArnesLink EAP je končana."
+
+#: res/resource.rcx:321
+msgid "ArnesLink Error"
+msgstr "Napaka ArnesLink"
+
+#: res/resource.rcx:381
+msgid "ArnesLink Import Wizard"
+msgstr "Čarovnik za uvoz ArnesLink"
+
+#: res/resource.rcx:366
+msgid "ArnesLink is starting EAP session..."
+msgstr "ArnesLink začenja sejo EAP ..."
+
+#: res/resource.rcx:233
+msgid "ArnesLink Monitor"
+msgstr "Nadzornik ArnesLink"
+
+#: res/resource.rcx:129
+msgid "ArnesLink Profile"
+msgstr "Profil ArnesLink "
+
+#: res/resource.rcx:380
+msgid "ArnesLink Profile Import"
+msgstr "Uvoz profila ArnesLink"
+
+#: res/resource.rcx:86
+msgid "ArnesLink Resources"
+msgstr "Viri ArnesLink"
+
+#: res/resource.rcx:361
+msgid "Authentication failed."
+msgstr "Overovljanje ni uspelo."
+
+#: res/resource.rcx:215
+msgid ""
+"Authentication server identified itself using a certificate you have not chosen to trust (yet). You can install the certificate's CA as trusted from now on, but be extra careful who you are trusting your "
+"credentials to!"
+msgstr ""
+"Strežnik za overjanje se je prestavil s potrdilom, ki ga (še) niste izbrali za zaupljivega. Izdajatelja potrdila lahko namestite kot zaupljivega od zdaj naprej, toda bodite zelo previdni, komu boste zaupali "
+"svoje poverilnice!"
+
+#: res/resource.rcx:217
+msgid ""
+"Authentication server identified itself using a certificate you have not chosen to trust. You can install the certificate's CA as trusted in profile configuration, but be extra careful who you are trusting your "
+"credentials to!"
+msgstr ""
+"Strežnik za overjanje se je prestavil s potrdilom, ki ga niste izbrali za zaupljivega. Izdajatelja potrdila lahko namestite kot zaupljivega v nastavitvah profila, toda bodite zelo previdni, komu boste zaupali "
+"svoje poverilnice!"
+
+#: res/resource.rcx:339
+msgid "Authentication succeeded."
+msgstr "Overovljanje je uspelo."
+
+#: res/resource.rcx:137 res/resource.rcx:202 res/resource.rcx:228 res/resource.rcx:395
+msgid "Cancel"
+msgstr "Prekliči"
+
+#: res/resource.rcx:337
+msgid "Certificate accepted by user."
+msgstr "Uporabnik je sprejel potrdilo."
+
+#: res/resource.rcx:356
+msgid "Certificate authority CA is not acceptable."
+msgstr "Izdajatelj potrdil (CA) ni sprejemljiv."
+
+#: res/resource.rcx:354
+msgid "Certificate authority CA is not trusted."
+msgstr "Izdajatelj potrdil (CA) ni zaupanja vreden."
+
+#: res/resource.rcx:336
+msgid "Certificate authority CA is trusted."
+msgstr "Izdajatelj potrdil (CA) je zaupanja vreden."
+
+#: res/resource.rcx:371
+msgid "Certificate Files"
+msgstr "Datoteke potrdil"
+
+#: res/resource.rcx:181
+msgid "Choose additional connection configuration."
+msgstr "Izberite dodatne nastavitve povezave."
+
+#: res/resource.rcx:157
+msgid "Clear Credentials"
+msgstr "Izbriši pover."
+
+#: res/resource.rcx:155
+msgid "Config MSCHAPv2"
+msgstr "Nastavi MSCHAPv2"
+
+#: res/resource.rcx:170
+msgid "Configure authentication server verification to prevent credential interception during man-in-the-middle attacks."
+msgstr "Nastavite preverjanje strežnika za overjanje, da preprečite prestrezanje svojih poverilnic med vrinjenimi napadi."
+
+#: res/resource.rcx:179
+msgid "Connection"
+msgstr "Povezava"
+
+#: res/resource.rcx:89
+msgid "Copyright © 2007"
+msgstr "Vse pravice pridržane © 2007"
+
+#: res/resource.rcx:348
+msgid "Either no change cipher spec was found or the server sent an incomplete packet (TLS state: %1!d!, packet code: %2!d!)."
+msgstr "Bodisi ni bilo specifikacije za spremembo šifre, bodisi je strežnik poslal nedokončan paket (stanje TLS: %1!d!, koda paketa: %2!d!)."
+
+# Language subtag according to IANA Language Subtag Registry
+# http://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
+#: res/resource.rcx:397
+msgid "en"
+msgstr "sl"
+
+#: res/resource.rcx:182
+msgid "Enable session resumption (&quick connect)"
+msgstr "Omogoči nadaljevanje seje (hitro povezovanje)"
+
+#: res/resource.rcx:149
+msgid "Enter credentials to be used when authenticating."
+msgstr "Vnesite poverilnice, ki jih želite uporabiti pri overovljanju."
+
+#: res/resource.rcx:362
+msgid "Error authenticating \"%1!ls!\" user using \"%2!s!\" profile.%n1. Please verify user ID and password are correct;%n2. Contact your network provider and verify current state of network; or%n3. Retry later."
+msgstr ""
+"Napaka pri overovljanje uporabnika »%1!ls!« s profilom »%2!s!«.%n1. Preverite, ali sta ID uporabnika in geslo pravilna;%n2. Obrnite se na svojega ponudnika spletnega dostopa in preverite trenutno stanje omrežja "
+"ali%n3. Poskusite ponovno kasneje."
+
+#: res/resource.rcx:344
+msgid "Error building a response packet (TLS state: %1!d!, error: %2!ld!)."
+msgstr "Napaka pri izgradnji paketa za odgovor (stanje TLS: %1!d!, napaka: %2!ld!)."
+
+#: res/resource.rcx:329
+msgid "Error finding profile name.%nPlease contact your network provider to review the validity of profile file."
+msgstr "Napaka pri iskanju imena profila.%nObrnite se na svojega ponudnika spletnega dostopa za pregled veljavnosti datoteke profila."
+
+#: res/resource.rcx:328
+msgid "Error finding selected identity provider.%nPlease contact your network provider to review the validity of profile file."
+msgstr "Napaka pri iskanju izbranega ponudnika overovljanja.%nObrnite se na svojega ponudnika spletnega dostopa za pregled veljavnosti datoteke profila."
+
+#: res/resource.rcx:360
+msgid "Error handling inner authentication (error: %1!ld!)."
+msgstr "Napaka pri urejanju notranjega overovljanja (napaka: %1!ld!)."
+
+#: res/resource.rcx:343
+msgid "Error initializing response packet (error: %1!ld!)."
+msgstr "Napaka pri vzpostavitvi paketa za odgovor (napaka: %1!ld!)."
+
+#: res/resource.rcx:332
+msgid "Error installing XML profile (error: %1!ld!). The reason WLAN supplied is:%n%2!ls!%n%nPlease contact your network provider."
+msgstr "Napaka pri nameščanju profila XML (napaka: %1!ld!). Razlog, ki ga je navedel WLAN, je:%n%2!ls!%n%nObrnite se na svojega ponudnika spletnega dostopa."
+
+#: res/resource.rcx:326
+msgid "Error loading \"%1!ls!\" profile file (error: %2!ld!).%nPlease make sure the file path is correct and the file content is XML."
+msgstr "Napaka pri nalaganju datoteke profila »%1!ls!« (napaka: %2!ld!).%nPrepričajte se, ali je pot datoteke pravilna in vsebina datoteke XML."
+
+#: res/resource.rcx:347
+msgid "Error parsing server packet (error: %1!ld!)."
+msgstr "Napaka pri razčlembi strežnikovega paketa (napaka: %1!ld!)."
+
+#: res/resource.rcx:330
+msgid "Error preparing XML profile.%nPlease contact your network provider."
+msgstr "Napaka pri pripravi profila XML.%nObrnite se na svojega ponudnika spletnega dostopa."
+
+#: res/resource.rcx:323
+msgid ""
+"Error reading \"%1!.*ls!\" certificate file (error: %2!ld!).%nPlease make sure the file path is correct; you have read permission; file contains certificate in X.509 or PKCS #7, binary (DER) or Base64 (PEM) "
+"encoded."
+msgstr ""
+"Napaka pri branju datoteke potrdila »%1!.*ls!« (napaka: %2!ld!).%nPrepričajte se, ali je pot datoteke pravilna, ali imate pravico branja ter ali datoteka vsebuje potrdilo v zapisu X.509 ali PKCS #7 in je "
+"kodirana binarno (DER) ali Base64 (PEM)."
+
+#: res/resource.rcx:349
+msgid "Error reading server messsage (packet code: %1!d!, error: %2!ld!)."
+msgstr "Napaka pri branju strežnikovega sporočila (koda paketa: %1!d!, napaka: %2!ld!)."
+
+#: res/resource.rcx:331
+msgid "Error removing installed XML profile \"%1!ls!\" (error: %2!ld!).%nPlease contact your network provider."
+msgstr "Napaka pri odstranjevanju nameščenega profila XML »%1!ls!« (napaka: %2!ld!).%nObrnite se na svojega ponudnika spletnega dostopa."
+
+#: res/resource.rcx:358
+msgid "Error verifying server certificate chain (error: %1!ld!)."
+msgstr "Napaka pri preverjanju verige strežnikovega potrdila (napaka: %1!ld!)."
+
+#: res/resource.rcx:353
+msgid "Error verifying server name (error: %1!ld!)."
+msgstr "Napaka pri preverjanju strežnikovega imena (napaka: %1!ld!)."
+
+#: res/resource.rcx:386
+msgid "I will enter my user ID and password on every connect."
+msgstr "Svoj uporabniški ID in geslo bom vnesel ob vsaki povezavi."
+
+#: res/resource.rcx:390
+msgid "Import failed!"
+msgstr "Uvoz ni uspel!"
+
+#: res/resource.rcx:389
+msgid "Import successfully completed."
+msgstr "Uvoz je uspešno končan."
+
+#: res/resource.rcx:388
+msgid "Importing profile..."
+msgstr "Uvoz profila ..."
+
+#: res/resource.rcx:144
+msgid "Inner Authentication"
+msgstr "Notranje overovljanje"
+
+# Language Identifier (see http://msdn.microsoft.com/en-us/library/windows/desktop/dd318693(v=vs.85).aspx)
+#: res/resource.rcx:117
+msgid "LANG_ENGLISH"
+msgstr "LANG_SLOVENIAN"
+
+#: res/resource.rcx:385
+msgid "My user ID and password will be remembered."
+msgstr "Moj uporabniški ID in geslo bosta shranjena."
+
+#: res/resource.rcx:335
+msgid "Name \"%1\" in server certificate is expected."
+msgstr "Ime strežnikovega potrdila »%1« je pričakovano."
+
+#: res/resource.rcx:359
+msgid "No server certificate found."
+msgstr "Ne najdem strežnikovega potrdila."
+
+#: res/resource.rcx:136 res/resource.rcx:201
+msgid "OK"
+msgstr "V redu"
+
+#: res/resource.rcx:159
+msgid "Outer Identity"
+msgstr "Zunanja identiteta"
+
+#: res/resource.rcx:165
+msgid "Outer Identity:"
+msgstr "Zunanja identiteta:"
+
+#: res/resource.rcx:152 res/resource.rcx:197 res/resource.rcx:274 res/resource.rcx:377
+msgid "Password:"
+msgstr "Geslo:"
+
+#: res/resource.rcx:338
+msgid "Performing inner authentication..."
+msgstr "Izvajam notranje overovljanje ..."
+
+#: res/resource.rcx:334
+msgid "Performing outer authentication..."
+msgstr "Izvajam zunanje overovljanje ..."
+
+#: res/resource.rcx:373
+msgid "PKCS #7 Certificate Files"
+msgstr "Datoteke potrdil PKCS #7"
+
+#: res/resource.rcx:219
+msgid "Please make sure the authentication server and communication path to it is not compromised, or consult your authentication provider."
+msgstr "Preverite, da strežnik za overjanje in komunikacijska pot do njega nista napadena, oz. se posvetujte s svojim ponudnikom overovljanja."
+
+#: res/resource.rcx:194 res/resource.rcx:271
+msgid "Please provide your user ID and password."
+msgstr "Vnesite svoj ID uporabnika in geslo."
+
+#: res/resource.rcx:341
+msgid "Please review the trace log for possible clues, or send it to your network provider for further assistance."
+msgstr "Preglejte dnevnik za morebitne namige, ali ga pošljite svojemu ponudniku spletnega dostopa za nadaljnjo pomoč."
+
+#: res/resource.rcx:262
+msgid "Pre&configured Credentials..."
+msgstr "Prednastavljene poverilni&ce ..."
+
+#: res/resource.rcx:146
+msgid "Select the method to use when performing TTLS authentication. MSCHAPv2 is always used when performing PEAP authentication."
+msgstr "Izberite uporabljeno metodo med izvedbo overovljanja TTLS. Med overovljanjem PEAP bo vedno uporabljena metoda MSCHAPv2."
+
+#: res/resource.rcx:161
+msgid "Select the user ID supplicant introduces itself as to authenticator."
+msgstr "Izberite ID uporabnika, pod katerim se bo odjemalec prestavil overovitelju."
+
+#: res/resource.rcx:351
+msgid "Server certificate name is unknown."
+msgstr "Ime strežnikovega potrdila je neznano."
+
+#: res/resource.rcx:350
+msgid "Server requested an unexpected version (packet code: %1!d!, requested: %2!d!, expected: %3!d!)."
+msgstr "Strežnik je zahteval nepričakovano verzijo (koda paketa: %1!d!, zahtevano: %2!d!, pričakovano: %3!d!)."
+
+#: res/resource.rcx:345
+msgid "Server sent an unexpected packet (TLS state: %1!d!, packet code: %2!d!)."
+msgstr "Strežnik je poslal nepričakovan paket (stanje TLS: %1!d!, koda paketa: %2!d!)."
+
+#: res/resource.rcx:346
+msgid "Server sent an unexpected request packet (packet data: %1!d!)."
+msgstr "Strežnik je poslal nepričakovan paket z zahtevo (podatek paketa: %1!d!)."
+
+#: res/resource.rcx:168
+msgid "Server Trust"
+msgstr "Verodostojnost strežnika"
+
+#: res/resource.rcx:192
+msgid "Session Credentials"
+msgstr "Sejne poverilnice"
+
+#: res/resource.rcx:156
+msgid "Set Credentials"
+msgstr "Nastavi pover."
+
+# Sublanguage Identifier (see http://msdn.microsoft.com/en-us/library/windows/desktop/dd318693(v=vs.85).aspx)
+#: res/resource.rcx:117
+msgid "SUBLANG_DEFAULT"
+msgstr "SUBLANG_DEFAULT"
+
+#: res/resource.rcx:357
+msgid ""
+"The \"%1!hs!\" server certificate was not issued by a CA \"%2!s!\" profile is set to accept.%nPlease make sure the authentication server and communication path to it is not compromised.%nYou can add CA to the "
+"list of acceptable CAs in profile, but only after you are totally positive the server certificate represents true authorities."
+msgstr ""
+"Strežnikovega potrdila »%1!hs!« ni izdal izdajatelj potrdil CA, ki bi bil v profilu »%2!s!« naveden med sprejemljivimi.%nPreverite, da strežnik za overjanje in komunikacijska pot do njega nista napadena.%nCA "
+"lahko v profilu dodate na spisek sprejemljivih izdajateljev, vendar šele po tem, ko ste popolnoma prepričani, da strežnikovo potrdilo predstavlja pooblaščeno organizacijo."
+
+#: res/resource.rcx:355
+msgid ""
+"The \"%1!hs!\" server certificate was not issued by a trusted CA.%nPlease make sure the authentication server and communication path to it is not compromised.%nYou can add the CA to the list of trusted root CAs, "
+"but only after you are totally positive the server certificate represents true authorities."
+msgstr ""
+"Strežnikovega potrdila »%1!hs!« ni izdal zaupanja vreden izdajatelj potrdil CA.%nPreverite, da strežnik za overjanje in komunikacijska pot do njega nista napadena.%CA lahko dodate na spisek zaupanja vrednih "
+"izhodiščnih izdajateljev CA, vendar šele po tem, ko ste popolnoma prepričani, da strežnikovo potrdilo predstavlja pooblaščeno organizacijo."
+
+#: res/resource.rcx:352
+msgid ""
+"The \"%1!hs!\" server name presented in certificate does not match any configured in \"%2!s!\" profile.%nPlease make sure the authentication server and communication path to it is not compromised.%nYou can add "
+"server name to the list of approved server names in profile, or disable server name verification, but only after you are totally positive the server certificate represents true authorities."
+msgstr ""
+"Ime strežnika »%1!hs!« navedeno v potrdilu se ne ujema z nobenim nastavljenim v profilu »%2!s!«.%nPreverite, da strežnik za overjanje in komunikacijska pot do njega nista napadena.%nStrežnikovo ime lahko v "
+"profilu dodate na spisek možnih imen, ali izklopite preverjanje strežnikovega imena, vendar šele po tem, ko ste popolnoma prepričani, da strežnikovo potrdilo predstavlja pooblaščeno organizacijo."
+
+#: res/resource.rcx:245
+msgid "The ArnesLink Configuration XML file contains all required data to set-up your connection. This wizard will create or update your WLAN profiles according to it."
+msgstr "Nastavitvena datoteka XML ArnesLink vsebuje vse potrebne informacije za nastavitev vaše povezave. Glede na njo bo čarovnik ustvaril ali posodobil vaše profile WLAN."
+
+#: res/resource.rcx:276
+msgid "The credentials entered here will be used when connecting. You can remove or change them later in WLAN profile settings. (Leave blank to prompt on connect.)"
+msgstr "Poverilnice vnesene tukaj bodo uporabljene ob prijavi. Kasneje jih lahko odstranite ali uredite v nastavitvah profila WLAN. (Pustite prazno, če želite poziv ob povezavi.)"
+
+#: res/resource.rcx:363
+msgid "The credentials for this WLAN profile are not available or failed."
+msgstr "Poverilnice za ta profil WLAN niso na voljo ali so zatajile."
+
+#: res/resource.rcx:254
+msgid "This ArnesLink Configuration XML file contains more than one identity provider. Please select the one you have your user account at."
+msgstr "Ta nastavitvena datoteka XML ArnesLink vsebuje več kot enega ponudnika overovljanja. Izberite tistega, pri katerem imate svoj uporabniški račun."
+
+#: res/resource.rcx:325
+msgid "This file might not the appropriate one. The XML file root element should be <%1!ls!>, not <%2!ls!>."
+msgstr "Ta datoteka najbrž ne bo prava. Korenski element datoteke XML mora biti <%1!ls!>, ne <%2!ls!>."
+
+#: res/resource.rcx:364
+msgid ""
+"This is a Windows 10 machine with non-functioning EAP UI. Unfortunately, there is no known way to prompt user for credentials. Therefore, they must be pre-configured in WLAN profile. Please, configure "
+"credentials in WLAN profile configuration and retry."
+msgstr ""
+"To so Windowsi 10 z nedelujočim up. vmesnikom EAP. Žal ne obstaja znan način, da bi lahko uporabnika pozvali za poverilnice. Zato jih morate vnaprej vpisati v nastavitvah profila WLAN. Nastavite poverilnice v "
+"nastavitvah profila WLAN in poskusite ponovno."
+
+#: res/resource.rcx:327
+msgid "This is not a valid ArnesLink configuration XML file.%nPlease contact your network provider."
+msgstr "To ni veljavna nastavitvena datoteka XML ArnesLink.%nObrnite se na svojega ponudnika spletnega dostopa."
+
+#: res/resource.rcx:309
+msgid "Trace &Log..."
+msgstr "Dnevnik ..."
+
+#: res/resource.rcx:213
+msgid ""
+"Unknown Server Certificate: The connection is not secure!\\r\n"
+"Your password might get stolen if you proceed."
+msgstr ""
+"Neznano strežnikovo potrdilo: povezava ni varna!\\r\n"
+"Vaše geslo lahko ukradejo, če nadaljujete."
+
+#: res/resource.rcx:342
+msgid "Unknown state (TLS state: %1!d!)."
+msgstr "Neznano stanje (stanje TLS: %1!d!)."
+
+#: res/resource.rcx:163
+msgid "Use &empty outer identity (RFC 4822)"
+msgstr "Uporabi prazno zunanjo id&entiteto (RFC 4822)"
+
+#: res/resource.rcx:150 res/resource.rcx:195 res/resource.rcx:272 res/resource.rcx:376
+msgid "User ID:"
+msgstr "ID uporabnika:"
+
+#: res/resource.rcx:223
+msgid "Vie&w"
+msgstr "Poglej"
+
+#: res/resource.rcx:384
+msgid "What kind of credentials do you want to use?"
+msgstr "Katero vrsto poverilnic želite uporabljati?"
+
+#: res/resource.rcx:382
+msgid "Which configuration file do you want to import?"
+msgstr "Katero nastavitveno datoteko želite uvoziti?"
+
+#: res/resource.rcx:383
+msgid "Which identity provider do you want to import?"
+msgstr "Katerega ponudnika overovljanja želite uvoziti?"
+
+#: res/resource.rcx:387
+msgid "Which user identity and password do you want to use?"
+msgstr "Katero identiteto in geslo želite uporabljati?"
+
+#: res/resource.rcx:372
+msgid "X.509 Certificate Files"
+msgstr "Datoteke potrdil X.509"
+
+#: res/resource.rcx:264
+msgid "You can remove credentials or change them later in WLAN profile settings."
+msgstr "Poverilnice lahko odstranite ali jih spremenite kasneje v nastavitvah profila WLAN."
+
+#: res/resource.rcx:324
+msgid "You have not specified any trusted root CA. ArnesLink will trust certificates signed by any globally trusted CA. Continue?"
+msgstr "Navedli niste nobenega zaupanja vrednega korenskega izdajatelja potrdil (CA). ArnesLink bo zaupal potrdilom, ki jih je izdal katerikoli globalni priznani CA. Nadaljujem?"
+
+#~ msgid "Renew IP a&ddress after authentication"
+#~ msgstr "Obnovi naslov IP po uspešni overovitvi"
+
+#~ msgid "Spawning IP address renewal..."
+#~ msgstr "Odložen zagon obnove naslova IP ..."
+
+#~ msgid "The credentials for this WLAN profile are not available and this is a Windows 10 machine with non-functioning EAP UI. Please, pre-configure credentials in WLAN profile configuration and retry."
+#~ msgstr "Poverilnice za ta profil WLAN niso na voljo in to so Windowsi 10 z nedelujočim up. vmesnikom EAP. Vnaprej nastavite poverilnice v nastavitvah profila WLAN in poskusite ponovno."
+
+#~ msgid "Error checking Server Authentication extension (error: %1!ld!)."
+#~ msgstr "Napaka pri preverjanju razširitve Server Authentication (napaka: %1!ld!)."
+
+#~ msgid "Server certificate includes Server Authentication extension as required."
+#~ msgstr "Strežnikovo potrdilo vsebuje razširitve Server Authentication, kot je zahtevano."
+
+#~ msgid "Server certificate is missing Server Authentication extension."
+#~ msgstr "Strežnikovo potrdilo ne vsebuje razširitve Server Authentication."
+
+#~ msgid "Server certificate must include Server Authentication extens&ion"
+#~ msgstr "Strežnikovo potrdilo mora vsebovati razš&iritev Server Authentication"
+
+#~ msgid ""
+#~ "The authentication server certificate does not include Server Authentication extension and \"%1!.*ls!\" profile explicitly requires it.%nPlease make sure the authentication server and communication path to it "
+#~ "is not compromised.%nYou can disable Server Authentication extension verification in profile, but only after you are totally positive the server certificate represents true authorities."
+#~ msgstr ""
+#~ "Potrdilo strežnika za overovljanje ne vsebuje razširitve Server Authentication, čeprav profil »%1!.*ls!« to izrecno zahteva.%nPreverite, da strežnik za overjanje in komunikacijska pot do njega nista napadena."
+#~ "%nPreverjanje razširitve Server Authentication v profilu lahko izklopite, vendar šele po tem, ko ste popolnoma prepričani, da strežnikovo potrdilo predstavlja pooblaščeno organizacijo."
+
+#~ msgid "The credentials entered here will be used for this session only (temporarily). Please set permanent credentials in WLAN profile settings."
+#~ msgstr "Poverilnice vnesene tukaj bodo v uporabi samo to sejo (začasne). Stalne poverilnice nastavite v nastavitvah profila WLAN."

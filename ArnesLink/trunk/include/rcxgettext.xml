@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 1991-2015 Amebis
+
+    This file is part of rcxgettext.
+
+    rcxgettext is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    rcxgettext is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with rcxgettext. If not, see <http://www.gnu.org/licenses/>.
+-->
+<ProjectSchemaDefinitions xmlns="clr-namespace:Microsoft.Build.Framework.XamlTypes;assembly=Microsoft.Build.Framework" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib" xmlns:transformCallback="Microsoft.Cpp.Dev10.ConvertPropertyCallback">
+  <Rule Name="ResourceLocalizator" PageTemplate="tool" DisplayName="Resource Localizator" Order="200">
+    <Rule.DataSource>
+      <DataSource Persistence="ProjectFile" ItemType="ResourceLocalizator" />
+    </Rule.DataSource>
+    <Rule.Categories>
+      <Category Name="General"      DisplayName="General" />
+      <Category Name="Command Line" DisplayName="Command Line" Subtype="CommandLine" />
+    </Rule.Categories>
+    <StringListProperty  Category="General"      Name="LanguageCatalogs"                  Subtype="file"              Switch=" &quot;[value]&quot;" DisplayName="Language Catalogs"  Description="Specifies a list of language catalogs (PO files) to be used to localize the resources; use semi-coloned list if more than one." />
+    <StringProperty      Category="General"      Name="OutputFile"                        Subtype="file"              Switch=" &quot;[value]&quot;" DisplayName="Output File"        Description="Override the default output file." />
+    <StringProperty      Category="Command Line" Name="CommandLineTemplate"                                                                         DisplayName="Command Line"       Visible="False" IncludeInCommandLine="False" />
+    <StringListProperty  Category="Command Line" Name="Inputs"                            Subtype="file"                                            IsRequired="true" >
+      <StringListProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="ResourceLocalizator" SourceType="Item" />
+      </StringListProperty.DataSource>
+    </StringListProperty>
+    <StringProperty      Category="Command Line" Name="AdditionalOptions"                 Subtype="AdditionalOptions" Switch=" [value]"             DisplayName="Additional Options" Description="Additional Options" />
+    <DynamicEnumProperty Category="Command Line" Name="ResourceLocalizationBeforeTargets" EnumProvider="Targets"                                    DisplayName="Execute Before"     Description="Specifies the targets for the build customization to run before." IncludeInCommandLine="False">
+      <DynamicEnumProperty.ProviderSettings>
+        <NameValuePair Name="Exclude" Value="^ResourceLocalizationBeforeTargets|^Compute" />
+      </DynamicEnumProperty.ProviderSettings>
+      <DynamicEnumProperty.DataSource>
+        <DataSource Persistence="ProjectFile" HasConfigurationCondition="true" />
+      </DynamicEnumProperty.DataSource>
+    </DynamicEnumProperty>
+    <DynamicEnumProperty Category="Command Line" Name="ResourceLocalizationAfterTargets" EnumProvider="Targets"                                     DisplayName="Execute After"      Description="Specifies the targets for the build customization to run after." IncludeInCommandLine="False">
+      <DynamicEnumProperty.ProviderSettings>
+        <NameValuePair Name="Exclude" Value="^ResourceLocalizationAfterTargets|^Compute" />
+      </DynamicEnumProperty.ProviderSettings>
+      <DynamicEnumProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" HasConfigurationCondition="true" />
+      </DynamicEnumProperty.DataSource>
+    </DynamicEnumProperty>
+  </Rule>
+  <ItemType Name="ResourceLocalizator" DisplayName="Resource Localizator" />
+  <FileExtension Name="*.rcx" ContentType="ResourceLocalizator" />
+  <ContentType Name="ResourceLocalizator" DisplayName="Resource Localizator" ItemType="ResourceLocalizator" />
+  <Rule Name="MessageLocalizator" PageTemplate="tool" DisplayName="Message Localizator" Order="200">
+    <Rule.DataSource>
+      <DataSource Persistence="ProjectFile" ItemType="MessageLocalizator" />
+    </Rule.DataSource>
+    <Rule.Categories>
+      <Category Name="General"      DisplayName="General" />
+      <Category Name="Command Line" DisplayName="Command Line" Subtype="CommandLine" />
+    </Rule.Categories>
+    <StringListProperty  Category="General"      Name="LanguageCatalogs"                 Subtype="file"             Switch=" &quot;[value]&quot;" DisplayName="Language Catalogs"  Description="Specifies a list of language catalogs (PO files) to be used to localize the resources; use semi-coloned list if more than one." />
+    <DynamicEnumProperty Category="General"      Name="MessageLocalizationBeforeTargets" EnumProvider="Targets"                                   DisplayName="Execute Before"     Description="Specifies the targets for the build customization to run before." IncludeInCommandLine="False">
+      <DynamicEnumProperty.ProviderSettings>
+        <NameValuePair Name="Exclude" Value="^MessageLocalizationBeforeTargets|^Compute" />
+      </DynamicEnumProperty.ProviderSettings>
+      <DynamicEnumProperty.DataSource>
+        <DataSource Persistence="ProjectFile" HasConfigurationCondition="true" />
+      </DynamicEnumProperty.DataSource>
+    </DynamicEnumProperty>
+    <DynamicEnumProperty Category="General"      Name="MessageLocalizationAfterTargets"  EnumProvider="Targets"                                   DisplayName="Execute After"      Description="Specifies the targets for the build customization to run after." IncludeInCommandLine="False">
+      <DynamicEnumProperty.ProviderSettings>
+        <NameValuePair Name="Exclude" Value="^MessageLocalizationAfterTargets|^Compute" />
+      </DynamicEnumProperty.ProviderSettings>
+      <DynamicEnumProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="" HasConfigurationCondition="true" />
+      </DynamicEnumProperty.DataSource>
+    </DynamicEnumProperty>
+    <StringListProperty  Category="Command Line" Name="Inputs"                           Subtype="file"                                           IsRequired="true" >
+      <StringListProperty.DataSource>
+        <DataSource Persistence="ProjectFile" ItemType="MessageLocalizator" SourceType="Item" />
+      </StringListProperty.DataSource>
+    </StringListProperty>
+    <StringProperty      Category="Command Line" Name="CommandLineTemplate"                                                                       DisplayName="Command Line"       Visible="False" IncludeInCommandLine="False" />
+    <StringProperty      Category="Command Line" Name="AdditionalOptions"               Subtype="AdditionalOptions" Switch=" [value]"             DisplayName="Additional Options" Description="Additional Options" />
+  </Rule>
+  <ItemType Name="MessageLocalizator" DisplayName="Message Localizator" />
+  <FileExtension Name="*.mcx" ContentType="MessageLocalizator" />
+  <ContentType Name="MessageLocalizator" DisplayName="Message Localizator" ItemType="MessageLocalizator" />
+</ProjectSchemaDefinitions>
