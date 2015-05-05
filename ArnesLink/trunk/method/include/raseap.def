@@ -1,9 +1,0 @@
-EXPORTS
-	DllRegisterServer PRIVATE
-	DllUnregisterServer PRIVATE
-
-	RasEapGetInfo
-	RasEapInvokeInteractiveUI
-	RasEapInvokeConfigUI
-	RasEapFreeMemory
-	RasEapGetIdentity
