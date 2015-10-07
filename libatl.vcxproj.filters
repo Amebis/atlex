@@ -11,36 +11,36 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
+    <ClCompile Include="src\stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
+    <ClInclude Include="include\stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="atlwin.h">
+    <ClInclude Include="include\atlwin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="atlmsi.h">
+    <ClInclude Include="include\atlmsi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="atlcrypt.h">
+    <ClInclude Include="include\atlcrypt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="atlwlan.h">
+    <ClInclude Include="include\atlwlan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="atlshlwapi.h">
+    <ClInclude Include="include\atlshlwapi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="atlex.h">
+    <ClInclude Include="include\atlex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="atleap.h">
+    <ClInclude Include="include\atleap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="atlsec.h">
+    <ClInclude Include="include\atlsec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
