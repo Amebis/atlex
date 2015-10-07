@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectName>libatl</ProjectName>
     <ProjectGuid>{5A4EADF2-3237-457A-9DA8-BB9942A91019}</ProjectGuid>
     <RootNamespace>libatl</RootNamespace>
     <Keyword>Win32Proj</Keyword>
