@@ -29,5 +29,4 @@
 #include "atlsec.h"
 #endif
 #include "atlshlwapi.h"
-#include "atlwin.h"
 #include "atlwlan.h"
