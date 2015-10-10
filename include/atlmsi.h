@@ -23,8 +23,18 @@
 #include <atlstr.h>
 #include <MsiQuery.h>
 
+///
+/// \defgroup ATLMSIAPI Microsoft Installer API
+/// Integrates ATL classes with Microsoft Installer API
+///
+/// @{
 
-inline UINT MsiGetPropertyA(MSIHANDLE hInstall, LPCSTR szName, ATL::CAtlStringA &sValue)
+///
+/// Gets the value for an installer property and stores it in a ATL::CAtlStringA string.
+///
+/// \sa [MsiGetProperty function](https://msdn.microsoft.com/en-us/library/aa370134.aspx)
+///
+inline UINT MsiGetPropertyA(_In_ MSIHANDLE hInstall, _In_ LPCSTR szName, _Out_ ATL::CAtlStringA &sValue)
 {
     DWORD dwSize = 0;
     UINT uiResult;
@@ -49,7 +59,12 @@ inline UINT MsiGetPropertyA(MSIHANDLE hInstall, LPCSTR szName, ATL::CAtlStringA 
 }
 
 
-inline UINT MsiGetPropertyW(MSIHANDLE hInstall, LPCWSTR szName, ATL::CAtlStringW &sValue)
+///
+/// Gets the value for an installer property and stores it in a ATL::CAtlStringW string.
+///
+/// \sa [MsiGetProperty function](https://msdn.microsoft.com/en-us/library/aa370134.aspx)
+///
+inline UINT MsiGetPropertyW(_In_ MSIHANDLE hInstall, _In_ LPCWSTR szName, _Out_ ATL::CAtlStringW &sValue)
 {
     DWORD dwSize = 0;
     UINT uiResult;
@@ -74,7 +89,12 @@ inline UINT MsiGetPropertyW(MSIHANDLE hInstall, LPCWSTR szName, ATL::CAtlStringW
 }
 
 
-inline UINT MsiRecordGetStringA(MSIHANDLE hRecord, unsigned int iField, ATL::CAtlStringA &sValue)
+///
+/// Returns the string value of a record field and stores it in a ATL::CAtlStringA string.
+///
+/// \sa [MsiRecordGetString function](https://msdn.microsoft.com/en-us/library/aa370368.aspx)
+///
+inline UINT MsiRecordGetStringA(_In_ MSIHANDLE hRecord, _In_ unsigned int iField, _Out_ ATL::CAtlStringA &sValue)
 {
     DWORD dwSize = 0;
     UINT uiResult;
@@ -99,7 +119,12 @@ inline UINT MsiRecordGetStringA(MSIHANDLE hRecord, unsigned int iField, ATL::CAt
 }
 
 
-inline UINT MsiRecordGetStringW(MSIHANDLE hRecord, unsigned int iField, ATL::CAtlStringW &sValue)
+///
+/// Returns the string value of a record field and stores it in a ATL::CAtlStringW string.
+///
+/// \sa [MsiRecordGetString function](https://msdn.microsoft.com/en-us/library/aa370368.aspx)
+///
+inline UINT MsiRecordGetStringW(_In_ MSIHANDLE hRecord, _In_ unsigned int iField, _Out_ ATL::CAtlStringW &sValue)
 {
     DWORD dwSize = 0;
     UINT uiResult;
@@ -124,6 +149,11 @@ inline UINT MsiRecordGetStringW(MSIHANDLE hRecord, unsigned int iField, ATL::CAt
 }
 
 
+///
+/// Formats record field data and properties using a format string and stores it in a ATL::CAtlStringA string.
+///
+/// \sa [MsiFormatRecord function](https://msdn.microsoft.com/en-us/library/aa370109.aspx)
+///
 inline UINT MsiFormatRecordA(MSIHANDLE hInstall, MSIHANDLE hRecord, ATL::CAtlStringA &sValue)
 {
     DWORD dwSize = 0;
@@ -149,6 +179,11 @@ inline UINT MsiFormatRecordA(MSIHANDLE hInstall, MSIHANDLE hRecord, ATL::CAtlStr
 }
 
 
+///
+/// Formats record field data and properties using a format string and stores it in a ATL::CAtlStringW string.
+///
+/// \sa [MsiFormatRecord function](https://msdn.microsoft.com/en-us/library/aa370109.aspx)
+///
 inline UINT MsiFormatRecordW(MSIHANDLE hInstall, MSIHANDLE hRecord, ATL::CAtlStringW &sValue)
 {
     DWORD dwSize = 0;
@@ -174,7 +209,12 @@ inline UINT MsiFormatRecordW(MSIHANDLE hInstall, MSIHANDLE hRecord, ATL::CAtlStr
 }
 
 
-inline UINT MsiRecordReadStream(MSIHANDLE hRecord, unsigned int iField, ATL::CAtlArray<BYTE> &binData)
+///
+/// Reads bytes from a record stream field into a ATL::CAtlArray<BYTE> buffer.
+///
+/// \sa [MsiRecordReadStream function](https://msdn.microsoft.com/en-us/library/aa370370.aspx)
+///
+inline UINT MsiRecordReadStream(_In_ MSIHANDLE hRecord, _In_ unsigned int iField, _Out_ ATL::CAtlArray<BYTE> &binData)
 {
     DWORD dwSize = 0;
     UINT uiResult;
@@ -191,7 +231,12 @@ inline UINT MsiRecordReadStream(MSIHANDLE hRecord, unsigned int iField, ATL::CAt
 }
 
 
-inline UINT MsiGetTargetPathA(MSIHANDLE hInstall, LPCSTR szFolder, ATL::CAtlStringA &sValue)
+///
+/// Returns the full target path for a folder in the Directory table and stores it in a ATL::CAtlStringA string.
+///
+/// \sa [MsiGetTargetPath function](https://msdn.microsoft.com/en-us/library/aa370303.aspx)
+///
+inline UINT MsiGetTargetPathA(_In_ MSIHANDLE hInstall, _In_ LPCSTR szFolder, _Out_ ATL::CAtlStringA &sValue)
 {
     DWORD dwSize = 0;
     UINT uiResult;
@@ -216,7 +261,12 @@ inline UINT MsiGetTargetPathA(MSIHANDLE hInstall, LPCSTR szFolder, ATL::CAtlStri
 }
 
 
-inline UINT MsiGetTargetPathW(MSIHANDLE hInstall, LPCWSTR szFolder, ATL::CAtlStringW &sValue)
+///
+/// Returns the full target path for a folder in the Directory table and stores it in a ATL::CAtlStringW string.
+///
+/// \sa [MsiGetTargetPath function](https://msdn.microsoft.com/en-us/library/aa370303.aspx)
+///
+inline UINT MsiGetTargetPathW(_In_ MSIHANDLE hInstall, _In_ LPCWSTR szFolder, _Out_ ATL::CAtlStringW &sValue)
 {
     DWORD dwSize = 0;
     UINT uiResult;
@@ -239,3 +289,5 @@ inline UINT MsiGetTargetPathW(MSIHANDLE hInstall, LPCWSTR szFolder, ATL::CAtlStr
         return uiResult;
     }
 }
+
+/// @}

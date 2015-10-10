@@ -24,8 +24,18 @@
 #include <atlstr.h>
 #include <Windows.h>
 
+///
+/// \defgroup ATLWinAPI Windows API
+/// Integrates ATL classes with Microsoft Windows API
+///
+/// @{
 
-inline DWORD GetModuleFileNameA(__in_opt HMODULE hModule, __out ATL::CAtlStringA &sValue)
+///
+/// Retrieves the fully qualified path for the file that contains the specified module and stores it in a ATL::CAtlStringA string.
+///
+/// \sa [GetModuleFileName function](https://msdn.microsoft.com/en-us/library/windows/desktop/ms683197.aspx)
+///
+inline DWORD GetModuleFileNameA(_In_opt_ HMODULE hModule, _Out_ ATL::CAtlStringA &sValue)
 {
     DWORD dwSize = 0;
 
@@ -59,7 +69,12 @@ inline DWORD GetModuleFileNameA(__in_opt HMODULE hModule, __out ATL::CAtlStringA
 }
 
 
-inline DWORD GetModuleFileNameW(__in_opt HMODULE hModule, __out ATL::CAtlStringW &sValue)
+///
+/// Retrieves the fully qualified path for the file that contains the specified module and stores it in a ATL::CAtlStringW string.
+///
+/// \sa [GetModuleFileName function](https://msdn.microsoft.com/en-us/library/windows/desktop/ms683197.aspx)
+///
+inline DWORD GetModuleFileNameW(_In_opt_ HMODULE hModule, _Out_ ATL::CAtlStringW &sValue)
 {
     DWORD dwSize = 0;
 
@@ -93,7 +108,12 @@ inline DWORD GetModuleFileNameW(__in_opt HMODULE hModule, __out ATL::CAtlStringW
 }
 
 
-inline int GetWindowTextA(__in HWND hWnd, __out ATL::CAtlStringA &sValue)
+///
+/// Copies the text of the specified window's title bar (if it has one) into a ATL::CAtlStringA string.
+///
+/// \sa [GetWindowText function](https://msdn.microsoft.com/en-us/library/windows/desktop/ms633520.aspx)
+///
+inline int GetWindowTextA(_In_ HWND hWnd, _Out_ ATL::CAtlStringA &sValue)
 {
     int iResult;
 
@@ -117,7 +137,12 @@ inline int GetWindowTextA(__in HWND hWnd, __out ATL::CAtlStringA &sValue)
 }
 
 
-inline int GetWindowTextW(__in HWND hWnd, __out ATL::CAtlStringW &sValue)
+///
+/// Copies the text of the specified window's title bar (if it has one) into a ATL::CAtlStringW string.
+///
+/// \sa [GetWindowText function](https://msdn.microsoft.com/en-us/library/windows/desktop/ms633520.aspx)
+///
+inline int GetWindowTextW(_In_ HWND hWnd, _Out_ ATL::CAtlStringW &sValue)
 {
     int iResult;
 
@@ -141,7 +166,12 @@ inline int GetWindowTextW(__in HWND hWnd, __out ATL::CAtlStringW &sValue)
 }
 
 
-inline BOOL GetFileVersionInfoA(__in LPCSTR lptstrFilename, __reserved DWORD dwHandle, __out ATL::CAtlArray<BYTE> &aValue)
+///
+/// Retrieves version information for the specified file and stores it in a ATL::CAtlStringA string.
+///
+/// \sa [GetFileVersionInfo function](https://msdn.microsoft.com/en-us/library/windows/desktop/ms647003.aspx)
+///
+inline BOOL GetFileVersionInfoA(_In_ LPCSTR lptstrFilename, __reserved DWORD dwHandle, _Out_ ATL::CAtlArray<BYTE> &aValue)
 {
     // Get version info size.
     DWORD dwVerInfoSize = ::GetFileVersionInfoSizeA(lptstrFilename, &dwHandle);
@@ -158,7 +188,12 @@ inline BOOL GetFileVersionInfoA(__in LPCSTR lptstrFilename, __reserved DWORD dwH
 }
 
 
-inline BOOL GetFileVersionInfoW(__in LPCWSTR lptstrFilename, __reserved DWORD dwHandle, __out ATL::CAtlArray<BYTE> &aValue)
+///
+/// Retrieves version information for the specified file and stores it in a ATL::CAtlStringW string.
+///
+/// \sa [GetFileVersionInfo function](https://msdn.microsoft.com/en-us/library/windows/desktop/ms647003.aspx)
+///
+inline BOOL GetFileVersionInfoW(_In_ LPCWSTR lptstrFilename, __reserved DWORD dwHandle, _Out_ ATL::CAtlArray<BYTE> &aValue)
 {
     // Get version info size.
     DWORD dwVerInfoSize = ::GetFileVersionInfoSizeW(lptstrFilename, &dwHandle);
@@ -175,7 +210,12 @@ inline BOOL GetFileVersionInfoW(__in LPCWSTR lptstrFilename, __reserved DWORD dw
 }
 
 
-inline DWORD ExpandEnvironmentStringsA(__in LPCSTR lpSrc, ATL::CAtlStringA &sValue)
+///
+/// Expands environment-variable strings, replaces them with the values defined for the current user, and stores it in a ATL::CAtlStringA string.
+///
+/// \sa [ExpandEnvironmentStrings function](https://msdn.microsoft.com/en-us/library/windows/desktop/ms724265.aspx)
+///
+inline DWORD ExpandEnvironmentStringsA(_In_ LPCSTR lpSrc, ATL::CAtlStringA &sValue)
 {
     DWORD dwBufferSizeEst = (DWORD)strlen(lpSrc) + 0x100; // Initial estimate
 
@@ -204,7 +244,12 @@ inline DWORD ExpandEnvironmentStringsA(__in LPCSTR lpSrc, ATL::CAtlStringA &sVal
 }
 
 
-inline DWORD ExpandEnvironmentStringsW(__in LPCWSTR lpSrc, ATL::CAtlStringW &sValue)
+///
+/// Expands environment-variable strings, replaces them with the values defined for the current user, and stores it in a ATL::CAtlStringW string.
+///
+/// \sa [ExpandEnvironmentStrings function](https://msdn.microsoft.com/en-us/library/windows/desktop/ms724265.aspx)
+///
+inline DWORD ExpandEnvironmentStringsW(_In_ LPCWSTR lpSrc, ATL::CAtlStringW &sValue)
 {
     DWORD dwBufferSizeEst = (DWORD)wcslen(lpSrc) + 0x100; // Initial estimate
 
@@ -233,7 +278,13 @@ inline DWORD ExpandEnvironmentStringsW(__in LPCWSTR lpSrc, ATL::CAtlStringW &sVa
 }
 
 
-inline VOID GuidToString(_In_ LPCGUID lpGuid, ATL::CAtlStringA &str)
+///
+/// Formats GUID and stores it in a ATL::CAtlStringA string.
+///
+/// \param[in] lpGuid Pointer to GUID
+/// \param[out] str String to store the result to
+///
+inline VOID GuidToString(_In_ LPCGUID lpGuid, _Out_ ATL::CAtlStringA &str)
 {
     str.Format("{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
         lpGuid->Data1,
@@ -244,7 +295,13 @@ inline VOID GuidToString(_In_ LPCGUID lpGuid, ATL::CAtlStringA &str)
 }
 
 
-inline VOID GuidToString(_In_ LPCGUID lpGuid, ATL::CAtlStringW &str)
+///
+/// Formats GUID and stores it in a ATL::CAtlStringW string.
+///
+/// \param[in] lpGuid Pointer to GUID
+/// \param[out] str String to store the result to
+///
+inline VOID GuidToString(_In_ LPCGUID lpGuid, _Out_ ATL::CAtlStringW &str)
 {
     str.Format(L"{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
         lpGuid->Data1,
@@ -255,6 +312,22 @@ inline VOID GuidToString(_In_ LPCGUID lpGuid, ATL::CAtlStringW &str)
 }
 
 
+///
+/// Queries for a string value in the registry and stores it in a ATL::CAtlStringA string.
+///
+/// `REG_EXPAND_SZ` are expanded using `ExpandEnvironmentStrings()` before storing to sValue.
+///
+/// \param[in] hReg A handle to an open registry key. The key must have been opened with the KEY_QUERY_VALUE access right.
+/// \param[in] pszName The name of the registry value. If lpValueName is NULL or an empty string, "", the function retrieves the type and data for the key's unnamed or default value, if any.
+/// \param[out] sValue String to store the value to
+/// \return
+/// - `ERROR_SUCCESS` when query succeeds;
+/// - `ERROR_INVALID_DATA` when the registy value type is not `REG_SZ`, `REG_MULTI_SZ`, or `REG_EXPAND_SZ`;
+/// - `ERROR_OUTOFMEMORY` when the memory allocation for the sValue buffer fails;
+/// - Error code when query fails. See `RegQueryValueEx()` for the list of error codes.
+/// \sa [RegQueryValueEx function](https://msdn.microsoft.com/en-us/library/windows/desktop/ms724911.aspx)
+/// \sa [ExpandEnvironmentStrings function](https://msdn.microsoft.com/en-us/library/windows/desktop/ms724265.aspx)
+///
 inline LSTATUS RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCSTR pszName, _Out_ ATL::CAtlStringA &sValue)
 {
     LSTATUS lResult;
@@ -288,6 +361,22 @@ inline LSTATUS RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCSTR pszName, _Out_ 
 }
 
 
+///
+/// Queries for a string value in the registry and stores it in a ATL::CAtlStringW string.
+///
+/// `REG_EXPAND_SZ` are expanded using `ExpandEnvironmentStrings()` before storing to sValue.
+///
+/// \param[in] hReg A handle to an open registry key. The key must have been opened with the KEY_QUERY_VALUE access right.
+/// \param[in] pszName The name of the registry value. If lpValueName is NULL or an empty string, "", the function retrieves the type and data for the key's unnamed or default value, if any.
+/// \param[out] sValue String to store the value to
+/// \return
+/// - `ERROR_SUCCESS` when query succeeds;
+/// - `ERROR_INVALID_DATA` when the registy value type is not `REG_SZ`, `REG_MULTI_SZ`, or `REG_EXPAND_SZ`;
+/// - `ERROR_OUTOFMEMORY` when the memory allocation for the sValue buffer fails;
+/// - Error code when query fails. See `RegQueryValueEx()` for the list of error codes.
+/// \sa [RegQueryValueEx function](https://msdn.microsoft.com/en-us/library/windows/desktop/ms724911.aspx)
+/// \sa [ExpandEnvironmentStrings function](https://msdn.microsoft.com/en-us/library/windows/desktop/ms724265.aspx)
+///
 inline LSTATUS RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCWSTR pszName, _Out_ ATL::CAtlStringW &sValue)
 {
     LSTATUS lResult;
@@ -321,7 +410,12 @@ inline LSTATUS RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCWSTR pszName, _Out_
 }
 
 
-inline LSTATUS RegQueryValueExA(__in HKEY hKey, __in_opt LPCSTR lpValueName, __reserved LPDWORD lpReserved, __out_opt LPDWORD lpType, __out ATL::CAtlArray<BYTE> &aData)
+///
+/// Retrieves the type and data for the specified value name associated with an open registry key and stores the data in a ATL::CAtlArray<BYTE> buffer.
+///
+/// \sa [RegQueryValueEx function](https://msdn.microsoft.com/en-us/library/windows/desktop/ms724911.aspx)
+///
+inline LSTATUS RegQueryValueExA(_In_ HKEY hKey, _In_opt_ LPCSTR lpValueName, __reserved LPDWORD lpReserved, _Out_opt_ LPDWORD lpType, _Out_ ATL::CAtlArray<BYTE> &aData)
 {
     LSTATUS lResult;
     DWORD dwDataSize;
@@ -336,7 +430,12 @@ inline LSTATUS RegQueryValueExA(__in HKEY hKey, __in_opt LPCSTR lpValueName, __r
 }
 
 
-inline LSTATUS RegQueryValueExW(__in HKEY hKey, __in_opt LPCWSTR lpValueName, __reserved LPDWORD lpReserved, __out_opt LPDWORD lpType, __out ATL::CAtlArray<BYTE> &aData)
+///
+/// Retrieves the type and data for the specified value name associated with an open registry key and stores the data in a ATL::CAtlArray<BYTE> buffer.
+///
+/// \sa [RegQueryValueEx function](https://msdn.microsoft.com/en-us/library/windows/desktop/ms724911.aspx)
+///
+inline LSTATUS RegQueryValueExW(_In_ HKEY hKey, _In_opt_ LPCWSTR lpValueName, __reserved LPDWORD lpReserved, _Out_opt_ LPDWORD lpType, _Out_ ATL::CAtlArray<BYTE> &aData)
 {
     LSTATUS lResult;
     DWORD dwDataSize;
@@ -353,7 +452,12 @@ inline LSTATUS RegQueryValueExW(__in HKEY hKey, __in_opt LPCWSTR lpValueName, __
 
 #if _WIN32_WINNT >= _WIN32_WINNT_VISTA
 
-inline LSTATUS RegLoadMUIStringA(__in HKEY hKey, __in_opt LPCSTR pszValue, __out ATL::CAtlStringA &sOut, __in DWORD Flags, __in_opt LPCSTR pszDirectory)
+///
+/// Loads the specified string from the specified key and subkey, and stores it in a ATL::CAtlStringA string.
+///
+/// \sa [RegLoadMUIString function](https://msdn.microsoft.com/en-us/library/windows/desktop/ms724890.aspx)
+///
+inline LSTATUS RegLoadMUIStringA(_In_ HKEY hKey, _In_opt_ LPCSTR pszValue, _Out_ ATL::CAtlStringA &sOut, _In_ DWORD Flags, _In_opt_ LPCSTR pszDirectory)
 {
     LSTATUS lResult;
     DWORD dwSize;
@@ -372,7 +476,12 @@ inline LSTATUS RegLoadMUIStringA(__in HKEY hKey, __in_opt LPCSTR pszValue, __out
 }
 
 
-inline LSTATUS RegLoadMUIStringW(__in HKEY hKey, __in_opt LPCWSTR pszValue, __out ATL::CAtlStringW &sOut, __in DWORD Flags, __in_opt LPCWSTR pszDirectory)
+///
+/// Loads the specified string from the specified key and subkey, and stores it in a ATL::CAtlStringW string.
+///
+/// \sa [RegLoadMUIString function](https://msdn.microsoft.com/en-us/library/windows/desktop/ms724890.aspx)
+///
+inline LSTATUS RegLoadMUIStringW(_In_ HKEY hKey, _In_opt_ LPCWSTR pszValue, _Out_ ATL::CAtlStringW &sOut, _In_ DWORD Flags, _In_opt_ LPCWSTR pszDirectory)
 {
     LSTATUS lResult;
     DWORD dwSize;
@@ -392,19 +501,37 @@ inline LSTATUS RegLoadMUIStringW(__in HKEY hKey, __in_opt LPCWSTR pszValue, __ou
 
 #endif
 
+/// @}
+
 
 namespace ATL
 {
+    /// \addtogroup ATLWinAPI
+    /// @{
+
+    ///
+    /// Module handle wrapper
+    ///
     class CAtlLibrary : public CObjectWithHandleT<HMODULE>
     {
     public:
-        virtual ~CAtlLibrary() throw()
+        ///
+        /// Frees the module.
+        ///
+        /// \sa [FreeLibrary](https://msdn.microsoft.com/en-us/library/windows/desktop/ms683152.aspx)
+        ///
+        virtual ~CAtlLibrary()
         {
             if (m_h)
                 FreeLibrary(m_h);
         }
 
-        inline BOOL Load(__in LPCTSTR lpFileName, __reserved HANDLE hFile, __in DWORD dwFlags) throw()
+        ///
+        /// Loads the specified module into the address space of the calling process.
+        ///
+        /// \sa [LoadLibraryEx](https://msdn.microsoft.com/en-us/library/windows/desktop/ms684179.aspx)
+        ///
+        inline BOOL Load(_In_ LPCTSTR lpFileName, __reserved HANDLE hFile, _In_ DWORD dwFlags)
         {
             HANDLE h = LoadLibraryEx(lpFileName, hFile, dwFlags);
             if (h) {
@@ -415,9 +542,16 @@ namespace ATL
         }
 
     protected:
+        ///
+        /// Frees the module.
+        ///
+        /// \sa [FreeLibrary](https://msdn.microsoft.com/en-us/library/windows/desktop/ms683152.aspx)
+        ///
         virtual void InternalFree()
         {
             FreeLibrary(m_h);
         }
     };
+
+    /// @}
 }

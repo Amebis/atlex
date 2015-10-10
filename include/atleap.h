@@ -26,9 +26,21 @@ namespace ATL
 {
     namespace EAP
     {
+        ///
+        /// \defgroup ATLEAPAPI Extensible Authentication Protocol API
+        /// Integrates ATL classes with Microsoft EAP API
+        ///
+        /// @{
+
+        ///
+        /// EAP_ATTRIBUTE wrapper class
+        ///
         class CEAPAttribute : public EAP_ATTRIBUTE
         {
         public:
+            ///
+            /// Initializes a new EAP attribute set to eatReserved.
+            ///
             CEAPAttribute()
             {
                 eaType   = eatReserved;
@@ -36,11 +48,16 @@ namespace ATL
                 pValue   = NULL;
             }
 
+            ///
+            /// Destroys the EAP attribute.
+            ///
             ~CEAPAttribute()
             {
                 if (pValue)
                     delete pValue;
             }
         };
+
+        /// @}
     }
 }

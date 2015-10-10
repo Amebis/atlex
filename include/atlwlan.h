@@ -22,8 +22,18 @@
 #include <atlstr.h>
 #include <wlanapi.h>
 
+///
+/// \defgroup ATLWLANAPI WLAN API
+/// Integrates ATL classes with Microsoft WLAN API
+///
+/// @{
 
-inline DWORD WlanReasonCodeToString(__in DWORD dwReasonCode, __out ATL::CAtlStringW &sValue, __reserved PVOID pReserved)
+///
+/// Retrieves a string that describes a specified reason code and stores it in a ATL::CAtlStringW string.
+///
+/// \sa [WlanReasonCodeToString function](https://msdn.microsoft.com/en-us/library/windows/desktop/ms706768.aspx)
+///
+inline DWORD WlanReasonCodeToString(_In_ DWORD dwReasonCode, _Out_ ATL::CAtlStringW &sValue, __reserved PVOID pReserved)
 {
     DWORD dwSize = 0;
 
@@ -52,3 +62,5 @@ inline DWORD WlanReasonCodeToString(__in DWORD dwReasonCode, __out ATL::CAtlStri
         }
     }
 }
+
+/// @}

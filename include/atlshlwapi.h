@@ -22,7 +22,17 @@
 #include <atlstr.h>
 #include <Shlwapi.h>
 
+///
+/// \defgroup ATLShellWAPI Shell API
+/// Integrates ATL classes with Microsoft Shell API
+///
+/// @{
 
+///
+/// Simplifies a path by removing navigation elements such as "." and ".." to produce a direct, well-formed path, and stores it in a ATL::CAtlStringA string.
+///
+/// \sa [PathCanonicalize function](https://msdn.microsoft.com/en-us/library/windows/desktop/bb773569.aspx)
+///
 inline BOOL PathCanonicalizeA(__out ATL::CAtlStringA &sValue, __in LPCSTR pszPath)
 {
     // Prepare the buffer data and read into it.
@@ -38,6 +48,11 @@ inline BOOL PathCanonicalizeA(__out ATL::CAtlStringA &sValue, __in LPCSTR pszPat
 }
 
 
+///
+/// Simplifies a path by removing navigation elements such as "." and ".." to produce a direct, well-formed path, and stores it in a ATL::CAtlStringW string.
+///
+/// \sa [PathCanonicalize function](https://msdn.microsoft.com/en-us/library/windows/desktop/bb773569.aspx)
+///
 inline BOOL PathCanonicalizeW(__out ATL::CAtlStringW &sValue, __in LPCWSTR pszPath)
 {
     // Prepare the buffer data and read into it.
@@ -51,3 +66,5 @@ inline BOOL PathCanonicalizeW(__out ATL::CAtlStringW &sValue, __in LPCWSTR pszPa
     sValue.FreeExtra();
     return bResult;
 }
+
+/// @}

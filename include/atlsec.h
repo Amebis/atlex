@@ -19,8 +19,18 @@
 
 #include <Security.h>
 
+///
+/// \defgroup ATLSecurityAPI Security API
+/// Integrates ATL classes with Microsoft Security API
+///
+/// @{
 
-BOOLEAN GetUserNameExA(__in EXTENDED_NAME_FORMAT NameFormat, __out ATL::CAtlStringA &sName)
+///
+/// Retrieves the name of the user or other security principal associated with the calling thread and stores it in a ATL::CAtlStringA string.
+///
+/// \sa [GetUserNameEx function](https://msdn.microsoft.com/en-us/library/windows/desktop/ms724435.aspx)
+///
+BOOLEAN GetUserNameExA(_In_ EXTENDED_NAME_FORMAT NameFormat, _Out_ ATL::CAtlStringA &sName)
 {
     ULONG ulSize = 0;
 
@@ -52,7 +62,12 @@ BOOLEAN GetUserNameExA(__in EXTENDED_NAME_FORMAT NameFormat, __out ATL::CAtlStri
 }
 
 
-BOOLEAN GetUserNameExW(__in EXTENDED_NAME_FORMAT NameFormat, __out ATL::CAtlStringW &sName)
+///
+/// Retrieves the name of the user or other security principal associated with the calling thread and stores it in a ATL::CAtlStringW string.
+///
+/// \sa [GetUserNameEx function](https://msdn.microsoft.com/en-us/library/windows/desktop/ms724435.aspx)
+///
+BOOLEAN GetUserNameExW(_In_ EXTENDED_NAME_FORMAT NameFormat, _Out_ ATL::CAtlStringW &sName)
 {
     ULONG ulSize = 0;
 
@@ -82,3 +97,5 @@ BOOLEAN GetUserNameExW(__in EXTENDED_NAME_FORMAT NameFormat, __out ATL::CAtlStri
         return NO_ERROR;
     }
 }
+
+/// @}
