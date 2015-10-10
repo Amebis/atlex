@@ -264,7 +264,7 @@ inline LSTATUS RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCSTR pszName, _Out_ 
     if ((lResult = ::RegQueryValueExA(hReg, pszName, NULL, &dwType, NULL, &dwSize)) == ERROR_SUCCESS) {
         if (dwType == REG_SZ || dwType == REG_MULTI_SZ) {
             // The value is REG_SZ or REG_MULTI_SZ. Read it now.
-            LPSTR szTemp = sValue.GetBuffer(dwSize / sizeof(TCHAR));
+            LPSTR szTemp = sValue.GetBuffer(dwSize / sizeof(CHAR));
             if (!szTemp) return ERROR_OUTOFMEMORY;
             if ((lResult = ::RegQueryValueExA(hReg, pszName, NULL, NULL, (LPBYTE)szTemp, &dwSize)) == ERROR_SUCCESS) {
                 sValue.ReleaseBuffer();
@@ -297,7 +297,7 @@ inline LSTATUS RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCWSTR pszName, _Out_
     if ((lResult = ::RegQueryValueExW(hReg, pszName, NULL, &dwType, NULL, &dwSize)) == ERROR_SUCCESS) {
         if (dwType == REG_SZ || dwType == REG_MULTI_SZ) {
             // The value is REG_SZ or REG_MULTI_SZ. Read it now.
-            LPWSTR szTemp = sValue.GetBuffer(dwSize / sizeof(TCHAR));
+            LPWSTR szTemp = sValue.GetBuffer(dwSize / sizeof(WCHAR));
             if (!szTemp) return ERROR_OUTOFMEMORY;
             if ((lResult = ::RegQueryValueExW(hReg, pszName, NULL, NULL, (LPBYTE)szTemp, &dwSize)) == ERROR_SUCCESS) {
                 sValue.ReleaseBuffer();
