@@ -120,7 +120,7 @@ inline int GetWindowTextA(_In_ HWND hWnd, _Out_ ATL::CAtlStringA &sValue)
     // Query the final string length first.
     iResult = ::GetWindowTextLengthA(hWnd);
     if (iResult > 0) {
-        // Prepare the buffer and read the string data into it.
+        // Allocate buffer on heap and read the string data into it.
         LPSTR szBuffer = sValue.GetBuffer(iResult++);
         if (!szBuffer) {
             SetLastError(ERROR_OUTOFMEMORY);
@@ -149,7 +149,7 @@ inline int GetWindowTextW(_In_ HWND hWnd, _Out_ ATL::CAtlStringW &sValue)
     // Query the final string length first.
     iResult = ::GetWindowTextLengthW(hWnd);
     if (iResult > 0) {
-        // Prepare the buffer and read the string data into it.
+        // Allocate buffer on heap and read the string data into it.
         LPWSTR szBuffer = sValue.GetBuffer(iResult++);
         if (!szBuffer) {
             SetLastError(ERROR_OUTOFMEMORY);
@@ -331,15 +331,32 @@ inline VOID GuidToString(_In_ LPCGUID lpGuid, _Out_ ATL::CAtlStringW &str)
 inline LSTATUS RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCSTR pszName, _Out_ ATL::CAtlStringA &sValue)
 {
     LSTATUS lResult;
-    DWORD dwSize = 0, dwType;
+    BYTE aStackBuffer[ATL_STACK_BUFFER_BYTES];
+    DWORD dwSize = sizeof(aStackBuffer), dwType;
 
-    // Determine the type and size first.
-    if ((lResult = ::RegQueryValueExA(hReg, pszName, NULL, &dwType, NULL, &dwSize)) == ERROR_SUCCESS) {
+    // Try with stack buffer first.
+    lResult = ::RegQueryValueExA(hReg, pszName, NULL, &dwType, aStackBuffer, &dwSize);
+    if (lResult == ERROR_SUCCESS) {
+        if (dwType == REG_SZ || dwType == REG_MULTI_SZ) {
+            // The value is REG_SZ or REG_MULTI_SZ. Allocate buffer on heap, copy from stack buffer.
+            LPSTR szBuffer = sValue.GetBuffer(dwSize / sizeof(CHAR));
+            if (!szBuffer) return ERROR_OUTOFMEMORY;
+            memcpy(szBuffer, aStackBuffer, dwSize);
+            sValue.ReleaseBuffer();
+        } else if (dwType == REG_EXPAND_SZ) {
+            // The value is REG_EXPAND_SZ. Expand it from stack buffer.
+            if (::ExpandEnvironmentStringsA((const CHAR*)aStackBuffer, sValue) == 0)
+                lResult = ::GetLastError();
+        } else {
+            // The value is not a string type.
+            lResult = ERROR_INVALID_DATA;
+        }
+    } else if (lResult == ERROR_MORE_DATA) {
         if (dwType == REG_SZ || dwType == REG_MULTI_SZ) {
             // The value is REG_SZ or REG_MULTI_SZ. Read it now.
-            LPSTR szTemp = sValue.GetBuffer(dwSize / sizeof(CHAR));
-            if (!szTemp) return ERROR_OUTOFMEMORY;
-            if ((lResult = ::RegQueryValueExA(hReg, pszName, NULL, NULL, (LPBYTE)szTemp, &dwSize)) == ERROR_SUCCESS) {
+            LPSTR szBuffer = sValue.GetBuffer(dwSize / sizeof(CHAR));
+            if (!szBuffer) return ERROR_OUTOFMEMORY;
+            if ((lResult = ::RegQueryValueExA(hReg, pszName, NULL, NULL, (LPBYTE)szBuffer, &dwSize)) == ERROR_SUCCESS) {
                 sValue.ReleaseBuffer();
             } else {
                 // Reading of the value failed.
@@ -380,15 +397,32 @@ inline LSTATUS RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCSTR pszName, _Out_ 
 inline LSTATUS RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCWSTR pszName, _Out_ ATL::CAtlStringW &sValue)
 {
     LSTATUS lResult;
-    DWORD dwSize = 0, dwType;
+    BYTE aStackBuffer[ATL_STACK_BUFFER_BYTES];
+    DWORD dwSize = sizeof(aStackBuffer), dwType;
 
-    // Determine the type and size first.
-    if ((lResult = ::RegQueryValueExW(hReg, pszName, NULL, &dwType, NULL, &dwSize)) == ERROR_SUCCESS) {
+    // Try with stack buffer first.
+    lResult = ::RegQueryValueExW(hReg, pszName, NULL, &dwType, aStackBuffer, &dwSize);
+    if (lResult == ERROR_SUCCESS) {
+        if (dwType == REG_SZ || dwType == REG_MULTI_SZ) {
+            // The value is REG_SZ or REG_MULTI_SZ. Allocate buffer on heap, copy from stack buffer.
+            LPWSTR szBuffer = sValue.GetBuffer(dwSize / sizeof(WCHAR));
+            if (!szBuffer) return ERROR_OUTOFMEMORY;
+            memcpy(szBuffer, aStackBuffer, dwSize);
+            sValue.ReleaseBuffer();
+        } else if (dwType == REG_EXPAND_SZ) {
+            // The value is REG_EXPAND_SZ. Expand it from stack buffer.
+            if (::ExpandEnvironmentStringsW((const WCHAR*)aStackBuffer, sValue) == 0)
+                lResult = ::GetLastError();
+        } else {
+            // The value is not a string type.
+            lResult = ERROR_INVALID_DATA;
+        }
+    } else if (lResult == ERROR_MORE_DATA) {
         if (dwType == REG_SZ || dwType == REG_MULTI_SZ) {
             // The value is REG_SZ or REG_MULTI_SZ. Read it now.
-            LPWSTR szTemp = sValue.GetBuffer(dwSize / sizeof(WCHAR));
-            if (!szTemp) return ERROR_OUTOFMEMORY;
-            if ((lResult = ::RegQueryValueExW(hReg, pszName, NULL, NULL, (LPBYTE)szTemp, &dwSize)) == ERROR_SUCCESS) {
+            LPWSTR szBuffer = sValue.GetBuffer(dwSize / sizeof(WCHAR));
+            if (!szBuffer) return ERROR_OUTOFMEMORY;
+            if ((lResult = ::RegQueryValueExW(hReg, pszName, NULL, NULL, (LPBYTE)szBuffer, &dwSize)) == ERROR_SUCCESS) {
                 sValue.ReleaseBuffer();
             } else {
                 // Reading of the value failed.
@@ -418,11 +452,19 @@ inline LSTATUS RegQueryStringValue(_In_ HKEY hReg, _In_z_ LPCWSTR pszName, _Out_
 inline LSTATUS RegQueryValueExA(_In_ HKEY hKey, _In_opt_ LPCSTR lpValueName, __reserved LPDWORD lpReserved, _Out_opt_ LPDWORD lpType, _Out_ ATL::CAtlArray<BYTE> &aData)
 {
     LSTATUS lResult;
-    DWORD dwDataSize;
+    BYTE aStackBuffer[ATL_STACK_BUFFER_BYTES];
+    DWORD dwSize = sizeof(aStackBuffer);
 
-    if ((lResult = RegQueryValueExA(hKey, lpValueName, lpReserved, NULL, NULL, &dwDataSize)) == ERROR_SUCCESS) {
-        if (!aData.SetCount(dwDataSize)) return ERROR_OUTOFMEMORY;
-        if ((lResult = RegQueryValueExA(hKey, lpValueName, lpReserved, lpType, aData.GetData(), &dwDataSize)) != ERROR_SUCCESS)
+    // Try with stack buffer first.
+    lResult = RegQueryValueExA(hKey, lpValueName, lpReserved, NULL, aStackBuffer, &dwSize);
+    if (lResult == ERROR_SUCCESS) {
+        // Allocate buffer on heap, copy from stack buffer.
+        if (!aData.SetCount(dwSize)) return ERROR_OUTOFMEMORY;
+        memcpy(aData.GetData(), aStackBuffer, dwSize);
+    } else if (lResult == ERROR_MORE_DATA) {
+        // Allocate buffer on heap and retry.
+        if (!aData.SetCount(dwSize)) return ERROR_OUTOFMEMORY;
+        if ((lResult = RegQueryValueExA(hKey, lpValueName, lpReserved, lpType, aData.GetData(), &dwSize)) != ERROR_SUCCESS)
             aData.SetCount(0);
     }
 
@@ -438,11 +480,19 @@ inline LSTATUS RegQueryValueExA(_In_ HKEY hKey, _In_opt_ LPCSTR lpValueName, __r
 inline LSTATUS RegQueryValueExW(_In_ HKEY hKey, _In_opt_ LPCWSTR lpValueName, __reserved LPDWORD lpReserved, _Out_opt_ LPDWORD lpType, _Out_ ATL::CAtlArray<BYTE> &aData)
 {
     LSTATUS lResult;
-    DWORD dwDataSize;
+    BYTE aStackBuffer[ATL_STACK_BUFFER_BYTES];
+    DWORD dwSize = sizeof(aStackBuffer);
 
-    if ((lResult = RegQueryValueExW(hKey, lpValueName, lpReserved, NULL, NULL, &dwDataSize)) == ERROR_SUCCESS) {
-        if (!aData.SetCount(dwDataSize)) return ERROR_OUTOFMEMORY;
-        if ((lResult = RegQueryValueExW(hKey, lpValueName, lpReserved, lpType, aData.GetData(), &dwDataSize)) != ERROR_SUCCESS)
+    // Try with stack buffer first.
+    lResult = RegQueryValueExW(hKey, lpValueName, lpReserved, NULL, aStackBuffer, &dwSize);
+    if (lResult == ERROR_SUCCESS) {
+        // Allocate buffer on heap, copy from stack buffer.
+        if (!aData.SetCount(dwSize)) return ERROR_OUTOFMEMORY;
+        memcpy(aData.GetData(), aStackBuffer, dwSize);
+    } else if (lResult == ERROR_MORE_DATA) {
+        // Allocate buffer on heap and retry.
+        if (!aData.SetCount(dwSize)) return ERROR_OUTOFMEMORY;
+        if ((lResult = RegQueryValueExW(hKey, lpValueName, lpReserved, lpType, aData.GetData(), &dwSize)) != ERROR_SUCCESS)
             aData.SetCount(0);
     }
 
@@ -460,17 +510,25 @@ inline LSTATUS RegQueryValueExW(_In_ HKEY hKey, _In_opt_ LPCWSTR lpValueName, __
 inline LSTATUS RegLoadMUIStringA(_In_ HKEY hKey, _In_opt_ LPCSTR pszValue, _Out_ ATL::CAtlStringA &sOut, _In_ DWORD Flags, _In_opt_ LPCSTR pszDirectory)
 {
     LSTATUS lResult;
+    CHAR szStackBuffer[ATL_STACK_BUFFER_BYTES/sizeof(CHAR)];
     DWORD dwSize;
 
     Flags &= ~REG_MUI_STRING_TRUNCATE;
 
-    lResult = RegLoadMUIStringA(hKey, pszValue, NULL, 0, &dwSize, Flags, pszDirectory);
-    if (lResult == ERROR_MORE_DATA) {
-        LPSTR szBuffer = sOut.GetBuffer(dwSize - 1);
+    // Try with stack buffer first.
+    lResult = RegLoadMUIStringA(hKey, pszValue, szStackBuffer, _countof(szStackBuffer), &dwSize, Flags, pszDirectory);
+    if (lResult == ERROR_SUCCESS) {
+        // Allocate buffer on heap, copy from stack buffer.
+        LPSTR szBuffer = sOut.GetBuffer(dwSize);
         if (!szBuffer) return ERROR_OUTOFMEMORY;
-        sOut.ReleaseBuffer((lResult = RegLoadMUIStringA(hKey, pszValue, szBuffer, dwSize, &dwSize, Flags, pszDirectory)) == ERROR_SUCCESS ? dwSize - 1 : 0);
-    } else if (lResult == ERROR_SUCCESS)
-        sOut.Empty();
+        memcpy(szBuffer, szStackBuffer, dwSize);
+        sOut.ReleaseBuffer(dwSize);
+    } else if (lResult == ERROR_MORE_DATA) {
+        // Allocate buffer on heap and retry.
+        LPSTR szBuffer = sOut.GetBuffer(dwSize);
+        if (!szBuffer) return ERROR_OUTOFMEMORY;
+        sOut.ReleaseBuffer((lResult = RegLoadMUIStringA(hKey, pszValue, szBuffer, dwSize, &dwSize, Flags, pszDirectory)) == ERROR_SUCCESS ? dwSize : 0);
+    }
 
     return lResult;
 }
@@ -484,17 +542,25 @@ inline LSTATUS RegLoadMUIStringA(_In_ HKEY hKey, _In_opt_ LPCSTR pszValue, _Out_
 inline LSTATUS RegLoadMUIStringW(_In_ HKEY hKey, _In_opt_ LPCWSTR pszValue, _Out_ ATL::CAtlStringW &sOut, _In_ DWORD Flags, _In_opt_ LPCWSTR pszDirectory)
 {
     LSTATUS lResult;
+    WCHAR szStackBuffer[ATL_STACK_BUFFER_BYTES/sizeof(WCHAR)];
     DWORD dwSize;
 
     Flags &= ~REG_MUI_STRING_TRUNCATE;
 
-    lResult = RegLoadMUIStringW(hKey, pszValue, NULL, 0, &dwSize, Flags, pszDirectory);
-    if (lResult == ERROR_MORE_DATA) {
-        LPWSTR szBuffer = sOut.GetBuffer(dwSize - 1);
+    // Try with stack buffer first.
+    lResult = RegLoadMUIStringW(hKey, pszValue, szStackBuffer, _countof(szStackBuffer), &dwSize, Flags, pszDirectory);
+    if (lResult == ERROR_SUCCESS) {
+        // Allocate buffer on heap, copy from stack buffer.
+        LPWSTR szBuffer = sOut.GetBuffer(dwSize);
         if (!szBuffer) return ERROR_OUTOFMEMORY;
-        sOut.ReleaseBuffer((lResult = RegLoadMUIStringW(hKey, pszValue, szBuffer, dwSize, &dwSize, Flags, pszDirectory)) == ERROR_SUCCESS ? dwSize - 1 : 0);
-    } else if (lResult == ERROR_SUCCESS)
-        sOut.Empty();
+        wmemcpy(szBuffer, szStackBuffer, dwSize);
+        sOut.ReleaseBuffer(dwSize);
+    } else if (lResult == ERROR_MORE_DATA) {
+        // Allocate buffer on heap and retry.
+        LPWSTR szBuffer = sOut.GetBuffer(dwSize);
+        if (!szBuffer) return ERROR_OUTOFMEMORY;
+        sOut.ReleaseBuffer((lResult = RegLoadMUIStringW(hKey, pszValue, szBuffer, dwSize, &dwSize, Flags, pszDirectory)) == ERROR_SUCCESS ? dwSize : 0);
+    }
 
     return lResult;
 }

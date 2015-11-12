@@ -40,7 +40,7 @@ inline DWORD CertGetNameStringA(_In_ PCCERT_CONTEXT pCertContext, _In_ DWORD dwT
     // Query the final string length first.
     DWORD dwSize = ::CertGetNameStringA(pCertContext, dwType, dwFlags, pvTypePara, NULL, 0);
 
-    // Prepare the buffer to format the string data into and read it.
+    // Allocate buffer on heap to format the string data into and read it.
     LPSTR szBuffer = sNameString.GetBuffer(dwSize);
     if (!szBuffer) return ERROR_OUTOFMEMORY;
     dwSize = ::CertGetNameStringA(pCertContext, dwType, dwFlags, pvTypePara, szBuffer, dwSize);
@@ -59,7 +59,7 @@ inline DWORD CertGetNameStringW(_In_ PCCERT_CONTEXT pCertContext, _In_ DWORD dwT
     // Query the final string length first.
     DWORD dwSize = ::CertGetNameStringW(pCertContext, dwType, dwFlags, pvTypePara, NULL, 0);
 
-    // Prepare the buffer to format the string data into and read it.
+    // Allocate buffer on heap to format the string data into and read it.
     LPWSTR szBuffer = sNameString.GetBuffer(dwSize);
     if (!szBuffer) return ERROR_OUTOFMEMORY;
     dwSize = ::CertGetNameStringW(pCertContext, dwType, dwFlags, pvTypePara, szBuffer, dwSize);

@@ -36,22 +36,26 @@
 ///
 inline UINT MsiGetPropertyA(_In_ MSIHANDLE hInstall, _In_ LPCSTR szName, _Out_ ATL::CAtlStringA &sValue)
 {
-    DWORD dwSize = 0;
+    CHAR szStackBuffer[ATL_STACK_BUFFER_BYTES/sizeof(CHAR)];
+    DWORD dwSize = _countof(szStackBuffer);
     UINT uiResult;
 
-    // Query the actual string length first.
-    uiResult = ::MsiGetPropertyA(hInstall, szName, "", &dwSize);
-    if (uiResult == ERROR_MORE_DATA) {
-        // Prepare the buffer to read the string data into and read it.
+    // Try with stack buffer first.
+    uiResult = ::MsiGetPropertyA(hInstall, szName, szStackBuffer, &dwSize);
+    if (uiResult == NO_ERROR) {
+        // Allocate buffer on heap, copy from stack buffer, and zero terminate.
+        LPSTR szBuffer = sValue.GetBuffer(dwSize + 1);
+        if (!szBuffer) return ERROR_OUTOFMEMORY;
+        memcpy(szBuffer, szStackBuffer, dwSize); szBuffer[dwSize] = 0;
+        sValue.ReleaseBuffer(dwSize + 1);
+        return NO_ERROR;
+    } else if (uiResult == ERROR_MORE_DATA) {
+        // Allocate buffer on heap to read the string data into and read it.
         LPSTR szBuffer = sValue.GetBuffer(dwSize++);
         if (!szBuffer) return ERROR_OUTOFMEMORY;
         uiResult = ::MsiGetPropertyA(hInstall, szName, szBuffer, &dwSize);
         sValue.ReleaseBuffer(uiResult == NO_ERROR ? dwSize : 0);
         return uiResult;
-    } else if (uiResult == NO_ERROR) {
-        // The string in database is empty.
-        sValue.Empty();
-        return NO_ERROR;
     } else {
         // Return error code.
         return uiResult;
@@ -66,22 +70,26 @@ inline UINT MsiGetPropertyA(_In_ MSIHANDLE hInstall, _In_ LPCSTR szName, _Out_ A
 ///
 inline UINT MsiGetPropertyW(_In_ MSIHANDLE hInstall, _In_ LPCWSTR szName, _Out_ ATL::CAtlStringW &sValue)
 {
-    DWORD dwSize = 0;
+    WCHAR szStackBuffer[ATL_STACK_BUFFER_BYTES/sizeof(WCHAR)];
+    DWORD dwSize = _countof(szStackBuffer);
     UINT uiResult;
 
-    // Query the actual string length first.
-    uiResult = ::MsiGetPropertyW(hInstall, szName, L"", &dwSize);
-    if (uiResult == ERROR_MORE_DATA) {
-        // Prepare the buffer to read the string data into and read it.
+    // Try with stack buffer first.
+    uiResult = ::MsiGetPropertyW(hInstall, szName, szStackBuffer, &dwSize);
+    if (uiResult == NO_ERROR) {
+        // Allocate buffer on heap, copy from stack buffer, and zero terminate.
+        LPWSTR szBuffer = sValue.GetBuffer(dwSize + 1);
+        if (!szBuffer) return ERROR_OUTOFMEMORY;
+        wmemcpy(szBuffer, szStackBuffer, dwSize); szBuffer[dwSize] = 0;
+        sValue.ReleaseBuffer(dwSize + 1);
+        return NO_ERROR;
+    } else if (uiResult == ERROR_MORE_DATA) {
+        // Allocate buffer on heap to read the string data into and read it.
         LPWSTR szBuffer = sValue.GetBuffer(dwSize++);
         if (!szBuffer) return ERROR_OUTOFMEMORY;
         uiResult = ::MsiGetPropertyW(hInstall, szName, szBuffer, &dwSize);
         sValue.ReleaseBuffer(uiResult == NO_ERROR ? dwSize : 0);
         return uiResult;
-    } else if (uiResult == NO_ERROR) {
-        // The string in database is empty.
-        sValue.Empty();
-        return NO_ERROR;
     } else {
         // Return error code.
         return uiResult;
@@ -96,22 +104,26 @@ inline UINT MsiGetPropertyW(_In_ MSIHANDLE hInstall, _In_ LPCWSTR szName, _Out_ 
 ///
 inline UINT MsiRecordGetStringA(_In_ MSIHANDLE hRecord, _In_ unsigned int iField, _Out_ ATL::CAtlStringA &sValue)
 {
-    DWORD dwSize = 0;
+    CHAR szStackBuffer[ATL_STACK_BUFFER_BYTES/sizeof(CHAR)];
+    DWORD dwSize = _countof(szStackBuffer);
     UINT uiResult;
 
-    // Query the actual string length first.
-    uiResult = ::MsiRecordGetStringA(hRecord, iField, "", &dwSize);
-    if (uiResult == ERROR_MORE_DATA) {
-        // Prepare the buffer to read the string data into and read it.
+    // Try with stack buffer first.
+    uiResult = ::MsiRecordGetStringA(hRecord, iField, szStackBuffer, &dwSize);
+    if (uiResult == NO_ERROR) {
+        // Allocate buffer on heap, copy from stack buffer, and zero terminate.
+        LPSTR szBuffer = sValue.GetBuffer(dwSize + 1);
+        if (!szBuffer) return ERROR_OUTOFMEMORY;
+        memcpy(szBuffer, szStackBuffer, dwSize); szBuffer[dwSize] = 0;
+        sValue.ReleaseBuffer(dwSize + 1);
+        return NO_ERROR;
+    } else if (uiResult == ERROR_MORE_DATA) {
+        // Allocate buffer on heap to read the string data into and read it.
         LPSTR szBuffer = sValue.GetBuffer(dwSize++);
         if (!szBuffer) return ERROR_OUTOFMEMORY;
         uiResult = ::MsiRecordGetStringA(hRecord, iField, szBuffer, &dwSize);
         sValue.ReleaseBuffer(uiResult == NO_ERROR ? dwSize : 0);
         return uiResult;
-    } else if (uiResult == NO_ERROR) {
-        // The string in database is empty.
-        sValue.Empty();
-        return NO_ERROR;
     } else {
         // Return error code.
         return uiResult;
@@ -126,22 +138,26 @@ inline UINT MsiRecordGetStringA(_In_ MSIHANDLE hRecord, _In_ unsigned int iField
 ///
 inline UINT MsiRecordGetStringW(_In_ MSIHANDLE hRecord, _In_ unsigned int iField, _Out_ ATL::CAtlStringW &sValue)
 {
-    DWORD dwSize = 0;
+    WCHAR szStackBuffer[ATL_STACK_BUFFER_BYTES/sizeof(WCHAR)];
+    DWORD dwSize = _countof(szStackBuffer);
     UINT uiResult;
 
-    // Query the actual string length first.
-    uiResult = ::MsiRecordGetStringW(hRecord, iField, L"", &dwSize);
-    if (uiResult == ERROR_MORE_DATA) {
-        // Prepare the buffer to read the string data into and read it.
+    // Try with stack buffer first.
+    uiResult = ::MsiRecordGetStringW(hRecord, iField, szStackBuffer, &dwSize);
+    if (uiResult == NO_ERROR) {
+        // Allocate buffer on heap, copy from stack buffer, and zero terminate.
+        LPWSTR szBuffer = sValue.GetBuffer(dwSize + 1);
+        if (!szBuffer) return ERROR_OUTOFMEMORY;
+        wmemcpy(szBuffer, szStackBuffer, dwSize); szBuffer[dwSize] = 0;
+        sValue.ReleaseBuffer(dwSize + 1);
+        return NO_ERROR;
+    } else if (uiResult == ERROR_MORE_DATA) {
+        // Allocate buffer on heap to read the string data into and read it.
         LPWSTR szBuffer = sValue.GetBuffer(dwSize++);
         if (!szBuffer) return ERROR_OUTOFMEMORY;
         uiResult = ::MsiRecordGetStringW(hRecord, iField, szBuffer, &dwSize);
         sValue.ReleaseBuffer(uiResult == NO_ERROR ? dwSize : 0);
         return uiResult;
-    } else if (uiResult == NO_ERROR) {
-        // The string in database is empty.
-        sValue.Empty();
-        return NO_ERROR;
     } else {
         // Return error code.
         return uiResult;
@@ -156,22 +172,26 @@ inline UINT MsiRecordGetStringW(_In_ MSIHANDLE hRecord, _In_ unsigned int iField
 ///
 inline UINT MsiFormatRecordA(MSIHANDLE hInstall, MSIHANDLE hRecord, ATL::CAtlStringA &sValue)
 {
-    DWORD dwSize = 0;
+    CHAR szStackBuffer[ATL_STACK_BUFFER_BYTES/sizeof(CHAR)];
+    DWORD dwSize = _countof(szStackBuffer);
     UINT uiResult;
 
-    // Query the final string length first.
-    uiResult = ::MsiFormatRecordA(hInstall, hRecord, "", &dwSize);
-    if (uiResult == ERROR_MORE_DATA) {
-        // Prepare the buffer to format the string data into and read it.
+    // Try with stack buffer first.
+    uiResult = ::MsiFormatRecordA(hInstall, hRecord, szStackBuffer, &dwSize);
+    if (uiResult == NO_ERROR) {
+        // Allocate buffer on heap, copy from stack buffer, and zero terminate.
+        LPSTR szBuffer = sValue.GetBuffer(dwSize + 1);
+        if (!szBuffer) return ERROR_OUTOFMEMORY;
+        memcpy(szBuffer, szStackBuffer, dwSize); szBuffer[dwSize] = 0;
+        sValue.ReleaseBuffer(dwSize + 1);
+        return NO_ERROR;
+    } else if (uiResult == ERROR_MORE_DATA) {
+        // Allocate buffer on heap to format the string data into and read it.
         LPSTR szBuffer = sValue.GetBuffer(dwSize++);
         if (!szBuffer) return ERROR_OUTOFMEMORY;
         uiResult = ::MsiFormatRecordA(hInstall, hRecord, szBuffer, &dwSize);
         sValue.ReleaseBuffer(uiResult == NO_ERROR ? dwSize : 0);
         return uiResult;
-    } else if (uiResult == NO_ERROR) {
-        // The result is empty.
-        sValue.Empty();
-        return NO_ERROR;
     } else {
         // Return error code.
         return uiResult;
@@ -186,22 +206,26 @@ inline UINT MsiFormatRecordA(MSIHANDLE hInstall, MSIHANDLE hRecord, ATL::CAtlStr
 ///
 inline UINT MsiFormatRecordW(MSIHANDLE hInstall, MSIHANDLE hRecord, ATL::CAtlStringW &sValue)
 {
-    DWORD dwSize = 0;
+    WCHAR szStackBuffer[ATL_STACK_BUFFER_BYTES/sizeof(WCHAR)];
+    DWORD dwSize = _countof(szStackBuffer);
     UINT uiResult;
 
-    // Query the final string length first.
-    uiResult = ::MsiFormatRecordW(hInstall, hRecord, L"", &dwSize);
-    if (uiResult == ERROR_MORE_DATA) {
-        // Prepare the buffer to format the string data into and read it.
+    // Try with stack buffer first.
+    uiResult = ::MsiFormatRecordW(hInstall, hRecord, szStackBuffer, &dwSize);
+    if (uiResult == NO_ERROR) {
+        // Allocate buffer on heap, copy from stack buffer, and zero terminate.
+        LPWSTR szBuffer = sValue.GetBuffer(dwSize + 1);
+        if (!szBuffer) return ERROR_OUTOFMEMORY;
+        wmemcpy(szBuffer, szStackBuffer, dwSize); szBuffer[dwSize] = 0;
+        sValue.ReleaseBuffer(dwSize + 1);
+        return NO_ERROR;
+    } else if (uiResult == ERROR_MORE_DATA) {
+        // Allocate buffer on heap to format the string data into and read it.
         LPWSTR szBuffer = sValue.GetBuffer(dwSize++);
         if (!szBuffer) return ERROR_OUTOFMEMORY;
         uiResult = ::MsiFormatRecordW(hInstall, hRecord, szBuffer, &dwSize);
         sValue.ReleaseBuffer(uiResult == NO_ERROR ? dwSize : 0);
         return uiResult;
-    } else if (uiResult == NO_ERROR) {
-        // The result is empty.
-        sValue.Empty();
-        return NO_ERROR;
     } else {
         // Return error code.
         return uiResult;
@@ -238,22 +262,26 @@ inline UINT MsiRecordReadStream(_In_ MSIHANDLE hRecord, _In_ unsigned int iField
 ///
 inline UINT MsiGetTargetPathA(_In_ MSIHANDLE hInstall, _In_ LPCSTR szFolder, _Out_ ATL::CAtlStringA &sValue)
 {
-    DWORD dwSize = 0;
+    CHAR szStackBuffer[ATL_STACK_BUFFER_BYTES/sizeof(CHAR)];
+    DWORD dwSize = _countof(szStackBuffer);
     UINT uiResult;
 
-    // Query the final string length first.
-    uiResult = ::MsiGetTargetPathA(hInstall, szFolder, "", &dwSize);
-    if (uiResult == ERROR_MORE_DATA) {
-        // Prepare the buffer to format the string data into and read it.
+    // Try with stack buffer first.
+    uiResult = ::MsiGetTargetPathA(hInstall, szFolder, szStackBuffer, &dwSize);
+    if (uiResult == NO_ERROR) {
+        // Allocate buffer on heap, copy from stack buffer, and zero terminate.
+        LPSTR szBuffer = sValue.GetBuffer(dwSize + 1);
+        if (!szBuffer) return ERROR_OUTOFMEMORY;
+        memcpy(szBuffer, szStackBuffer, dwSize); szBuffer[dwSize] = 0;
+        sValue.ReleaseBuffer(dwSize + 1);
+        return NO_ERROR;
+    } else if (uiResult == ERROR_MORE_DATA) {
+        // Allocate buffer on heap to format the string data into and read it.
         LPSTR szBuffer = sValue.GetBuffer(dwSize++);
         if (!szBuffer) return ERROR_OUTOFMEMORY;
         uiResult = ::MsiGetTargetPathA(hInstall, szFolder, szBuffer, &dwSize);
         sValue.ReleaseBuffer(uiResult == NO_ERROR ? dwSize : 0);
         return uiResult;
-    } else if (uiResult == NO_ERROR) {
-        // The result is empty.
-        sValue.Empty();
-        return NO_ERROR;
     } else {
         // Return error code.
         return uiResult;
@@ -268,22 +296,26 @@ inline UINT MsiGetTargetPathA(_In_ MSIHANDLE hInstall, _In_ LPCSTR szFolder, _Ou
 ///
 inline UINT MsiGetTargetPathW(_In_ MSIHANDLE hInstall, _In_ LPCWSTR szFolder, _Out_ ATL::CAtlStringW &sValue)
 {
-    DWORD dwSize = 0;
+    WCHAR szStackBuffer[ATL_STACK_BUFFER_BYTES/sizeof(WCHAR)];
+    DWORD dwSize = _countof(szStackBuffer);
     UINT uiResult;
 
-    // Query the final string length first.
-    uiResult = ::MsiGetTargetPathW(hInstall, szFolder, L"", &dwSize);
-    if (uiResult == ERROR_MORE_DATA) {
-        // Prepare the buffer to format the string data into and read it.
+    // Try with stack buffer first.
+    uiResult = ::MsiGetTargetPathW(hInstall, szFolder, szStackBuffer, &dwSize);
+    if (uiResult == NO_ERROR) {
+        // Allocate buffer on heap, copy from stack buffer, and zero terminate.
+        LPWSTR szBuffer = sValue.GetBuffer(dwSize + 1);
+        if (!szBuffer) return ERROR_OUTOFMEMORY;
+        wmemcpy(szBuffer, szStackBuffer, dwSize); szBuffer[dwSize] = 0;
+        sValue.ReleaseBuffer(dwSize + 1);
+        return NO_ERROR;
+    } else if (uiResult == ERROR_MORE_DATA) {
+        // Allocate buffer on heap to format the string data into and read it.
         LPWSTR szBuffer = sValue.GetBuffer(dwSize++);
         if (!szBuffer) return ERROR_OUTOFMEMORY;
         uiResult = ::MsiGetTargetPathW(hInstall, szFolder, szBuffer, &dwSize);
         sValue.ReleaseBuffer(uiResult == NO_ERROR ? dwSize : 0);
         return uiResult;
-    } else if (uiResult == NO_ERROR) {
-        // The result is empty.
-        sValue.Empty();
-        return NO_ERROR;
     } else {
         // Return error code.
         return uiResult;

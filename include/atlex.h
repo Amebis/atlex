@@ -23,6 +23,23 @@
 #include <atldef.h>
 #include <atlstr.h>
 
+#ifndef ATL_STACK_BUFFER_BYTES
+///
+/// Size of the stack buffer in bytes used for initial system function call
+///
+/// Some system functions with variable length output data fail for
+/// insufficient buffer sizes, and return an exact buffer length required.
+/// The function helpers use a fixed size stack buffer first. If the stack
+/// buffer really prooved sufficient, the helper allocates the exact length
+/// output on heap and copies the data without calling the system function
+/// again. Otherwise it allocates the exact length output on heap and retries.
+///
+/// \note
+/// Decrease this value in case of stack overflow.
+///
+#define ATL_STACK_BUFFER_BYTES  1024
+#endif
+
 
 namespace ATL
 {

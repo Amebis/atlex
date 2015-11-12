@@ -35,7 +35,7 @@
 ///
 inline BOOL PathCanonicalizeA(__out ATL::CAtlStringA &sValue, __in LPCSTR pszPath)
 {
-    // Prepare the buffer data and read into it.
+    // Allocate buffer on heap and read into it.
     LPSTR szBuffer = sValue.GetBuffer(MAX_PATH);
     if (!szBuffer) {
         ::SetLastError(ERROR_OUTOFMEMORY);
@@ -55,7 +55,7 @@ inline BOOL PathCanonicalizeA(__out ATL::CAtlStringA &sValue, __in LPCSTR pszPat
 ///
 inline BOOL PathCanonicalizeW(__out ATL::CAtlStringW &sValue, __in LPCWSTR pszPath)
 {
-    // Prepare the buffer data and read into it.
+    // Allocate buffer on heap and read into it.
     LPWSTR szBuffer = sValue.GetBuffer(MAX_PATH);
     if (!szBuffer) {
         ::SetLastError(ERROR_OUTOFMEMORY);
