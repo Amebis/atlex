@@ -1,7 +1,7 @@
 /*
     Copyright 1991-2016 Amebis
 
-    This file is part of libatl.
+    This file is part of atlex.
 
     Setup is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
