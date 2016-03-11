@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include "atlex.h"
 #include <atlcoll.h>
 #include <atlstr.h>
 #include <MsiQuery.h>
