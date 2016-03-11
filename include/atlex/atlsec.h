@@ -17,6 +17,8 @@
     along with Setup. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma once
+
 #include <Security.h>
 
 ///
