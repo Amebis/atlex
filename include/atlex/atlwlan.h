@@ -22,6 +22,12 @@
 #include <atlstr.h>
 #include <wlanapi.h>
 
+
+// Must not statically link to Wlanapi.dll as it is not available on Windows
+// without a WLAN interface.
+extern DWORD (WINAPI *pfnWlanReasonCodeToString)(__in DWORD dwReasonCode, __in DWORD dwBufferSize, __in_ecount(dwBufferSize) PWCHAR pStringBuffer, __reserved PVOID pReserved);
+
+
 ///
 /// \defgroup ATLWLANAPI WLAN API
 /// Integrates ATL classes with Microsoft WLAN API
@@ -33,9 +39,16 @@
 ///
 /// \sa [WlanReasonCodeToString function](https://msdn.microsoft.com/en-us/library/windows/desktop/ms706768.aspx)
 ///
+/// \note
+/// Since Wlanapi.dll is not always present, the \c pfnWlanReasonCodeToString pointer to \c WlanReasonCodeToString
+/// function must be loaded dynamically.
+///
 inline DWORD WlanReasonCodeToString(_In_ DWORD dwReasonCode, _Out_ ATL::CAtlStringW &sValue, __reserved PVOID pReserved)
 {
     DWORD dwSize = 0;
+
+    if (!::pfnWlanReasonCodeToString)
+        return ERROR_CALL_NOT_IMPLEMENTED;
 
     for (;;) {
         // Increment size and allocate buffer.
@@ -43,7 +56,7 @@ inline DWORD WlanReasonCodeToString(_In_ DWORD dwReasonCode, _Out_ ATL::CAtlStri
         if (!szBuffer) return ERROR_OUTOFMEMORY;
 
         // Try!
-        DWORD dwResult = ::WlanReasonCodeToString(dwReasonCode, dwSize, szBuffer, pReserved);
+        DWORD dwResult = ::pfnWlanReasonCodeToString(dwReasonCode, dwSize, szBuffer, pReserved);
         if (dwResult == NO_ERROR) {
             DWORD dwLength = (DWORD)wcsnlen(szBuffer, dwSize);
             sValue.ReleaseBuffer(dwLength++);
