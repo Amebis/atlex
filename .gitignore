@@ -1,7 +1,7 @@
 /*.sdf
 /*.suo
 /*.opensdf
-/ipch
 /doc
-temp
+/ipch
 *.user
+temp
