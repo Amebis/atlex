@@ -45,10 +45,10 @@ inline UINT MsiGetPropertyA(_In_ MSIHANDLE hInstall, _In_ LPCSTR szName, _Out_ A
     uiResult = ::MsiGetPropertyA(hInstall, szName, szStackBuffer, &dwSize);
     if (uiResult == NO_ERROR) {
         // Allocate buffer on heap, copy from stack buffer, and zero terminate.
-        LPSTR szBuffer = sValue.GetBuffer(dwSize + 1);
+        LPSTR szBuffer = sValue.GetBuffer(dwSize);
         if (!szBuffer) return ERROR_OUTOFMEMORY;
-        memcpy(szBuffer, szStackBuffer, dwSize); szBuffer[dwSize] = 0;
-        sValue.ReleaseBuffer(dwSize + 1);
+        memcpy(szBuffer, szStackBuffer, dwSize);
+        sValue.ReleaseBuffer(dwSize);
         return NO_ERROR;
     } else if (uiResult == ERROR_MORE_DATA) {
         // Allocate buffer on heap to read the string data into and read it.
@@ -79,10 +79,10 @@ inline UINT MsiGetPropertyW(_In_ MSIHANDLE hInstall, _In_ LPCWSTR szName, _Out_ 
     uiResult = ::MsiGetPropertyW(hInstall, szName, szStackBuffer, &dwSize);
     if (uiResult == NO_ERROR) {
         // Allocate buffer on heap, copy from stack buffer, and zero terminate.
-        LPWSTR szBuffer = sValue.GetBuffer(dwSize + 1);
+        LPWSTR szBuffer = sValue.GetBuffer(dwSize);
         if (!szBuffer) return ERROR_OUTOFMEMORY;
-        wmemcpy(szBuffer, szStackBuffer, dwSize); szBuffer[dwSize] = 0;
-        sValue.ReleaseBuffer(dwSize + 1);
+        wmemcpy(szBuffer, szStackBuffer, dwSize);
+        sValue.ReleaseBuffer(dwSize);
         return NO_ERROR;
     } else if (uiResult == ERROR_MORE_DATA) {
         // Allocate buffer on heap to read the string data into and read it.
@@ -113,10 +113,10 @@ inline UINT MsiRecordGetStringA(_In_ MSIHANDLE hRecord, _In_ unsigned int iField
     uiResult = ::MsiRecordGetStringA(hRecord, iField, szStackBuffer, &dwSize);
     if (uiResult == NO_ERROR) {
         // Allocate buffer on heap, copy from stack buffer, and zero terminate.
-        LPSTR szBuffer = sValue.GetBuffer(dwSize + 1);
+        LPSTR szBuffer = sValue.GetBuffer(dwSize);
         if (!szBuffer) return ERROR_OUTOFMEMORY;
-        memcpy(szBuffer, szStackBuffer, dwSize); szBuffer[dwSize] = 0;
-        sValue.ReleaseBuffer(dwSize + 1);
+        memcpy(szBuffer, szStackBuffer, dwSize);
+        sValue.ReleaseBuffer(dwSize);
         return NO_ERROR;
     } else if (uiResult == ERROR_MORE_DATA) {
         // Allocate buffer on heap to read the string data into and read it.
@@ -147,10 +147,10 @@ inline UINT MsiRecordGetStringW(_In_ MSIHANDLE hRecord, _In_ unsigned int iField
     uiResult = ::MsiRecordGetStringW(hRecord, iField, szStackBuffer, &dwSize);
     if (uiResult == NO_ERROR) {
         // Allocate buffer on heap, copy from stack buffer, and zero terminate.
-        LPWSTR szBuffer = sValue.GetBuffer(dwSize + 1);
+        LPWSTR szBuffer = sValue.GetBuffer(dwSize);
         if (!szBuffer) return ERROR_OUTOFMEMORY;
-        wmemcpy(szBuffer, szStackBuffer, dwSize); szBuffer[dwSize] = 0;
-        sValue.ReleaseBuffer(dwSize + 1);
+        wmemcpy(szBuffer, szStackBuffer, dwSize);
+        sValue.ReleaseBuffer(dwSize);
         return NO_ERROR;
     } else if (uiResult == ERROR_MORE_DATA) {
         // Allocate buffer on heap to read the string data into and read it.
@@ -181,10 +181,10 @@ inline UINT MsiFormatRecordA(MSIHANDLE hInstall, MSIHANDLE hRecord, ATL::CAtlStr
     uiResult = ::MsiFormatRecordA(hInstall, hRecord, szStackBuffer, &dwSize);
     if (uiResult == NO_ERROR) {
         // Allocate buffer on heap, copy from stack buffer, and zero terminate.
-        LPSTR szBuffer = sValue.GetBuffer(dwSize + 1);
+        LPSTR szBuffer = sValue.GetBuffer(dwSize);
         if (!szBuffer) return ERROR_OUTOFMEMORY;
-        memcpy(szBuffer, szStackBuffer, dwSize); szBuffer[dwSize] = 0;
-        sValue.ReleaseBuffer(dwSize + 1);
+        memcpy(szBuffer, szStackBuffer, dwSize);
+        sValue.ReleaseBuffer(dwSize);
         return NO_ERROR;
     } else if (uiResult == ERROR_MORE_DATA) {
         // Allocate buffer on heap to format the string data into and read it.
@@ -215,10 +215,10 @@ inline UINT MsiFormatRecordW(MSIHANDLE hInstall, MSIHANDLE hRecord, ATL::CAtlStr
     uiResult = ::MsiFormatRecordW(hInstall, hRecord, szStackBuffer, &dwSize);
     if (uiResult == NO_ERROR) {
         // Allocate buffer on heap, copy from stack buffer, and zero terminate.
-        LPWSTR szBuffer = sValue.GetBuffer(dwSize + 1);
+        LPWSTR szBuffer = sValue.GetBuffer(dwSize);
         if (!szBuffer) return ERROR_OUTOFMEMORY;
-        wmemcpy(szBuffer, szStackBuffer, dwSize); szBuffer[dwSize] = 0;
-        sValue.ReleaseBuffer(dwSize + 1);
+        wmemcpy(szBuffer, szStackBuffer, dwSize);
+        sValue.ReleaseBuffer(dwSize);
         return NO_ERROR;
     } else if (uiResult == ERROR_MORE_DATA) {
         // Allocate buffer on heap to format the string data into and read it.
@@ -271,10 +271,10 @@ inline UINT MsiGetTargetPathA(_In_ MSIHANDLE hInstall, _In_ LPCSTR szFolder, _Ou
     uiResult = ::MsiGetTargetPathA(hInstall, szFolder, szStackBuffer, &dwSize);
     if (uiResult == NO_ERROR) {
         // Allocate buffer on heap, copy from stack buffer, and zero terminate.
-        LPSTR szBuffer = sValue.GetBuffer(dwSize + 1);
+        LPSTR szBuffer = sValue.GetBuffer(dwSize);
         if (!szBuffer) return ERROR_OUTOFMEMORY;
-        memcpy(szBuffer, szStackBuffer, dwSize); szBuffer[dwSize] = 0;
-        sValue.ReleaseBuffer(dwSize + 1);
+        memcpy(szBuffer, szStackBuffer, dwSize);
+        sValue.ReleaseBuffer(dwSize);
         return NO_ERROR;
     } else if (uiResult == ERROR_MORE_DATA) {
         // Allocate buffer on heap to format the string data into and read it.
@@ -305,10 +305,10 @@ inline UINT MsiGetTargetPathW(_In_ MSIHANDLE hInstall, _In_ LPCWSTR szFolder, _O
     uiResult = ::MsiGetTargetPathW(hInstall, szFolder, szStackBuffer, &dwSize);
     if (uiResult == NO_ERROR) {
         // Allocate buffer on heap, copy from stack buffer, and zero terminate.
-        LPWSTR szBuffer = sValue.GetBuffer(dwSize + 1);
+        LPWSTR szBuffer = sValue.GetBuffer(dwSize);
         if (!szBuffer) return ERROR_OUTOFMEMORY;
-        wmemcpy(szBuffer, szStackBuffer, dwSize); szBuffer[dwSize] = 0;
-        sValue.ReleaseBuffer(dwSize + 1);
+        wmemcpy(szBuffer, szStackBuffer, dwSize);
+        sValue.ReleaseBuffer(dwSize);
         return NO_ERROR;
     } else if (uiResult == ERROR_MORE_DATA) {
         // Allocate buffer on heap to format the string data into and read it.

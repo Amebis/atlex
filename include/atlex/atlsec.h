@@ -40,13 +40,13 @@ BOOLEAN GetUserNameExA(_In_ EXTENDED_NAME_FORMAT NameFormat, _Out_ ATL::CAtlStri
     // Try with stack buffer first.
     if (::GetUserNameExA(NameFormat, szStackBuffer, &ulSize)) {
         // Allocate buffer on heap, copy from stack buffer, and zero terminate.
-        LPSTR szBuffer = sName.GetBuffer(ulSize + 1);
+        LPSTR szBuffer = sName.GetBuffer(ulSize);
         if (!szBuffer) {
             SetLastError(ERROR_OUTOFMEMORY);
             return FALSE;
         }
-        memcpy(szBuffer, szStackBuffer, ulSize); szBuffer[ulSize] = 0;
-        sName.ReleaseBuffer(ulSize + 1);
+        memcpy(szBuffer, szStackBuffer, ulSize);
+        sName.ReleaseBuffer(ulSize);
         return TRUE;
     } else {
         if (::GetLastError() == ERROR_MORE_DATA) {
@@ -84,13 +84,13 @@ BOOLEAN GetUserNameExW(_In_ EXTENDED_NAME_FORMAT NameFormat, _Out_ ATL::CAtlStri
     // Try with stack buffer first.
     if (::GetUserNameExW(NameFormat, szStackBuffer, &ulSize)) {
         // Allocate buffer on heap, copy from stack buffer, and zero terminate.
-        LPWSTR szBuffer = sName.GetBuffer(ulSize + 1);
+        LPWSTR szBuffer = sName.GetBuffer(ulSize);
         if (!szBuffer) {
             SetLastError(ERROR_OUTOFMEMORY);
             return FALSE;
         }
-        wmemcpy(szBuffer, szStackBuffer, ulSize); szBuffer[ulSize] = 0;
-        sName.ReleaseBuffer(ulSize + 1);
+        wmemcpy(szBuffer, szStackBuffer, ulSize);
+        sName.ReleaseBuffer(ulSize);
         return TRUE;
     } else {
         if (::GetLastError() == ERROR_MORE_DATA) {
